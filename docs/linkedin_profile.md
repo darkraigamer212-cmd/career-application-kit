@@ -1,6 +1,18 @@
 # LinkedIn Profile Optimization
 
-Live LinkedIn review status: waiting for sign-in. The profile redirects to LinkedIn auth wall until Karthick signs in. Do not publish anything automatically.
+Live LinkedIn review status: reviewed after sign-in on July 5, 2026. Do not publish anything automatically.
+
+## Live Profile Findings
+
+- Display name currently shows `Darkrai Gamer (Deepan K)`. Change this to `Karthick` or `Deepan Karthick` for recruiter trust and consistency with the resume/portfolio.
+- Current headline is `Student at Ratinam`. Replace it with the recommended headline below.
+- Current organization line shows `Laksmipriya · Rathinam Global University`. Confirm spelling and whether `Laksmipriya` should appear publicly.
+- Current About section is strong, but it says `Sivakasi, Tamil Nadu` while the resume/portfolio use `Coimbatore, Tamil Nadu`. Use one consistent location.
+- Open To Work currently includes `Customs Specialist`, which does not match the software career package. Remove it and keep software roles only.
+- LinkedIn suggested adding projects; the Projects section appears incomplete or absent. Add Rental Research, Printing Press ERP, Timber Calculator, and Portfolio.
+- Top skills currently include strong items, but should be reordered toward Python, React, JavaScript, AI-assisted development, Automation, GitHub, Supabase, ERP, Dashboards, and PDF/DOCX generation.
+- Public profile URL exists: `www.linkedin.com/in/darkrai-gamer-166735374`. A cleaner URL such as `deepan-karthick` or `karthick-deepan` would be better if available.
+- Recent activity has useful intent, but posts need cleaner grammar and more project proof before job applications.
 
 ## Profile Edits For Approval
 

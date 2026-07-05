@@ -2,12 +2,9 @@
 
 ## Mission 2A Blockers
 
-- Sign in to GitHub CLI and push this repository as `career-application-kit`.
-- Enable GitHub Pages for the repository.
-- Verify the public portfolio URL after Pages finishes deploying.
-- Verify the public resume PDF URL after Pages finishes deploying.
-- Sign in to LinkedIn and review the live profile before applying.
-- Add or confirm project screenshots for ERP, Timber Calculator, and Wedding Card Studio if those are shown publicly.
+- Apply the prepared LinkedIn edits manually after approval.
+- Add LinkedIn projects and featured links manually; do not auto-publish.
+- Decide whether to keep the LinkedIn display name as `Karthick` or full legal name `Deepan Karthick`.
 - Confirm whether private ERP/client source code should stay private while the live demo remains public.
 
 ## Optional Future Improvements
