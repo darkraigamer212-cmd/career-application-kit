@@ -1,6 +1,6 @@
 # Application Message Templates
 
-Use these as starting points. Replace placeholders and tailor the first sentence to the company or client.
+Use these as starting points. Tailor the first sentence to the company or client before sending.
 
 ## Remote Internship Message
 
@@ -11,7 +11,7 @@ I am a BSc Computer Science (AI) student looking for a remote developer internsh
 I can help with Python scripts, React UI work, API integration, dashboards, documentation, and AI-assisted workflow prototypes. I am comfortable learning from feedback, sharing progress clearly, and keeping tasks well documented.
 
 Portfolio: `https://darkraigamer212-cmd.github.io/career-application-kit/portfolio/`
-GitHub: `https://github.com/darkraigamer212-cmd`
+GitHub: `https://github.com/darkraigamer212-cmd/career-application-kit`
 Resume: `https://darkraigamer212-cmd.github.io/career-application-kit/docs/generated/karthik_ats_resume.pdf`
 
 Thank you,
@@ -35,7 +35,7 @@ For your project, I would start with:
 Estimated timeline: `Available immediately for remote, flexible, part-time, internship, freelance, or contract work while studying. Flexible around college schedule, approximately 20-30 hours/week.`
 Budget: `Internship target: Rs. 10,000-Rs. 30,000/month; part-time remote developer target: Rs. 15,000-Rs. 50,000/month; freelance/project work: Rs. 20,000-Rs. 1,00,000+ based on scope.`
 
-GitHub: `https://github.com/darkraigamer212-cmd`
+GitHub: `https://github.com/darkraigamer212-cmd/career-application-kit`
 Portfolio: `https://darkraigamer212-cmd.github.io/career-application-kit/portfolio/`
 
 ## Part-Time Developer Message
@@ -48,7 +48,7 @@ I am strongest at turning unclear manual workflows into small useful tools: scri
 
 Featured project: Rental Research Report Generator, a Python tool that ranks housing options and generates bilingual decision reports.
 
-GitHub: `https://github.com/darkraigamer212-cmd`
-LinkedIn: `https://www.linkedin.com/in/darkrai-gamer-166735374`
+GitHub: `https://github.com/darkraigamer212-cmd/career-application-kit`
+LinkedIn: `https://www.linkedin.com/in/deepan-karthick-166735374/`
 Resume: `https://darkraigamer212-cmd.github.io/career-application-kit/docs/generated/karthik_ats_resume.pdf`
 

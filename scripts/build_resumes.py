@@ -21,7 +21,7 @@ PROFILE_LOCAL = ROOT / "profile_data.json"
 
 
 DEFAULT_PROFILE = {
-    "name": "Karthick",
+    "name": "Deepan Karthick",
     "email": "ADD_EMAIL",
     "phone": "ADD_PHONE",
     "city_country": "ADD_CITY_COUNTRY",
@@ -128,7 +128,7 @@ ATS = {
 STARTUP = {
     "filename": "karthik_startup_resume.docx",
     "pdf_filename": "karthik_startup_resume.pdf",
-    "subtitle": "Python automation + AI tools + practical web apps",
+    "subtitle": "Python automation + React dashboards + practical business software",
     "sections": [
         (
             "Profile",

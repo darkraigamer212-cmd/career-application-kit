@@ -313,6 +313,64 @@ pre {
   border-radius: 8px;
 }
 
+.links-page main {
+  max-width: 760px;
+}
+
+.links-hero {
+  padding: 56px 0 24px;
+}
+
+.links-hero h1 {
+  margin-bottom: 14px;
+  font-size: clamp(2.2rem, 9vw, 4.1rem);
+}
+
+.link-list {
+  display: grid;
+  gap: 12px;
+  padding: 8px 0 32px;
+}
+
+.link-card {
+  display: grid;
+  gap: 4px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+}
+
+.link-card:hover {
+  border-color: var(--teal);
+  transform: translateY(-1px);
+}
+
+.link-card span {
+  color: var(--teal);
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.link-card strong {
+  font-size: 1rem;
+}
+
+.primary-link {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: #fff;
+}
+
+.primary-link span {
+  color: #d6f2ee;
+}
+
+.compact-contact {
+  margin-top: 24px;
+}
+
 @media (max-width: 900px) {
   .site-header {
     align-items: flex-start;

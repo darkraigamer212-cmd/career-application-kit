@@ -1,12 +1,12 @@
-# Karthick
+# Deepan Karthick
 
-Python automation + AI tools + practical web apps
+Python automation + React dashboards + practical business software
 
-`deepankarthick212@gmail.com` | `9487572163` | GitHub: `https://github.com/darkraigamer212-cmd` | LinkedIn: `https://www.linkedin.com/in/darkrai-gamer-166735374` | Portfolio: `https://darkraigamer212-cmd.github.io/career-application-kit/portfolio/`
+`deepankarthick212@gmail.com` | `9487572163` | GitHub: `https://github.com/darkraigamer212-cmd/career-application-kit` | LinkedIn: `https://www.linkedin.com/in/deepan-karthick-166735374/` | Portfolio: `https://darkraigamer212-cmd.github.io/career-application-kit/portfolio/`
 
 ## Profile
 
-I build practical tools that turn messy work into usable software: ranked lists, reports, dashboards, ERP-style workflows, automations, and AI-assisted development systems. I am looking for remote internships, freelance projects, contract work, and part-time developer roles where speed, ownership, and clear communication matter.
+I build practical tools that turn messy work into usable software: ranked lists, PDF/DOCX reports, React dashboards, ERP-style workflows, automations, and AI-assisted development systems. I am looking for remote internships, freelance projects, contract work, and part-time developer roles where speed, ownership, and clear communication matter.
 
 ## What I Can Help With
 
@@ -15,7 +15,7 @@ I build practical tools that turn messy work into usable software: ranked lists,
 - React dashboards and portfolio pages
 - Data cleanup and structured summaries
 - Internal tools for small teams
-- AI-assisted prototyping, prompt workflows, and documentation
+- AI-assisted prototyping, prompt workflows, documentation, and testing
 
 ## Best Proof
 
@@ -29,18 +29,25 @@ Impact:
 - Turned public listing data into a ranked report with budget and commute logic.
 - Produced family-ready outputs: PDF, DOCX, Markdown, and WhatsApp summary.
 - Included real-world safeguards: water, internet, safety, deposit, and agreement verification checklist.
+- Added offline sample data and tests so the project can be shown reliably.
 
-Tech: Python, ReportLab, python-docx, JSON, web parsing
+Tech: Python, ReportLab, python-docx, JSON, CLI, web parsing
 
 ### Printing Press ERP / Business Management System
 
-Built and deployed a practical business management system for printing press workflows, operational tracking, and dashboards.
+Built and deployed a practical business management system for printing press workflows, operational tracking, dashboards, role-based access, and order operations.
 
-Tech: React, business workflows, dashboard development
+Impact:
+
+- Turned manual business workflows into structured software screens.
+- Created a stronger understanding of inventory, production, orders, and operational visibility.
+- Practiced building software that business owners can review and give feedback on.
+
+Tech: React, Supabase, JavaScript, Vite, business workflows, dashboard development
 
 ## Skills
 
-Python, JavaScript, React, Vite, Supabase, Django basics, HTML, CSS, REST APIs, PostgreSQL, Git, GitHub, GitHub Actions, Codex, ChatGPT, AI-assisted development, prompt engineering, ERP development, dashboard development, business software, automation, PDF/DOCX generation, responsive web design, UI/UX design, basic testing, CI/CD basics, CLI tools, technical documentation
+Python, JavaScript, React, Vite, Supabase, HTML, CSS, REST APIs, PostgreSQL, Git, GitHub, GitHub Actions, Codex, ChatGPT, AI-assisted development, prompt engineering, ERP development, dashboard development, business software, automation, PDF/DOCX generation, responsive web design, UI/UX design, basic testing, CI/CD basics, CLI tools, technical documentation, Django basics
 
 ## Work Style
 
@@ -51,7 +58,7 @@ Python, JavaScript, React, Vite, Supabase, Django basics, HTML, CSS, REST APIs, 
 
 ## Education
 
-`B.Sc. Computer Science with Artificial Intelligence`, `Rathinam Global, Coimbatore` - Expected Graduation `2028`
+`B.Sc. Computer Science with Artificial Intelligence`, `Rathinam Global University, Coimbatore` - Expected Graduation `2028`
 
 Current Semester: `3` | CGPA: `8.0`
 

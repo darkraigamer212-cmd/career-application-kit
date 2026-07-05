@@ -50,6 +50,6 @@ Tech: Python, ReportLab, python-docx, JSON, web data parsing
 ## Contact
 
 - Portfolio: `https://darkraigamer212-cmd.github.io/career-application-kit/portfolio/`
-- LinkedIn: `https://www.linkedin.com/in/darkrai-gamer-166735374`
+- LinkedIn: `https://www.linkedin.com/in/deepan-karthick-166735374/`
 - Email: `deepankarthick212@gmail.com`
 
