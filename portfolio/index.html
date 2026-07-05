@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Karthick | Python, AI, and Web Tools</title>
+    <meta name="description" content="Portfolio for Karthick, a B.Sc. CS (AI) student building Python automation, AI-assisted tools, report generators, ERP dashboards, and practical web apps.">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#top">Karthick</a>
+      <nav aria-label="Primary navigation">
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="role">Student Developer</p>
+          <h1>Python, AI, and practical web tools</h1>
+          <p class="lead">I build automation scripts, ERP dashboards, report generators, and web tools that turn messy real-world work into clear outputs.</p>
+          <div class="actions">
+            <a class="button primary" href="#projects">View Projects</a>
+            <a class="button secondary" href="../docs/generated/karthik_ats_resume.pdf">Download Resume</a>
+          </div>
+          <ul class="quick-skills" aria-label="Core skills">
+            <li>Python</li>
+            <li>React</li>
+            <li>ERP tools</li>
+            <li>AI tools</li>
+          </ul>
+        </div>
+
+        <div class="code-panel" aria-label="Code sample">
+          <div class="window-bar">
+            <span></span>
+            <span></span>
+            <span></span>
+            <strong>automate.py</strong>
+          </div>
+          <pre><code>def generate_report(listings):
+    clean = filter_unsuitable(listings)
+    ranked = score_by_budget_and_commute(clean)
+    return build_pdf(
+        ranked,
+        sections=["budget", "checklist", "sources"]
+    )</code></pre>
+        </div>
+      </section>
+
+      <section id="projects" class="section">
+        <div class="section-heading">
+          <p class="role">Featured Project</p>
+          <h2>Rental Research Report Generator</h2>
+        </div>
+        <article class="featured-project">
+          <figure class="report-preview">
+            <img src="../output/pdf/rathinam_rental_research_pack_page-1.png" alt="Preview of generated rental research report PDF page">
+            <figcaption>Generated PDF report preview</figcaption>
+          </figure>
+          <div class="project-copy">
+            <p class="tag">Python</p>
+            <h3>Automated rental research into bilingual PDF/DOCX reports</h3>
+            <p>Collects public listing data, filters noisy results, ranks suitable homes, and generates reports with budgets, commute estimates, and verification checklists.</p>
+            <ul>
+              <li>Web data parsing and cleaning</li>
+              <li>Ranking logic for rent, commute, furnishing, and deposit</li>
+              <li>English and Tamil PDF/DOCX output</li>
+              <li>Practical decision support for a real local problem</li>
+            </ul>
+            <a class="button primary" href="../README.md">Read Project README</a>
+            <a class="button secondary" href="../output/pdf/sample_rental_research_pack.pdf">View Sample PDF</a>
+            <a class="button secondary" href="../docs/project_case_study_rental_research.md">Read Case Study</a>
+          </div>
+        </article>
+        <article class="featured-project secondary-project">
+          <div class="project-copy">
+            <p class="tag">React</p>
+            <h3>Printing Press ERP / Business Management System</h3>
+            <p>Business management software for printing press workflows, inventory, production tracking, role-based access, dashboards, and order operations.</p>
+            <a class="button primary" href="https://lakshmipriya-erp.vercel.app/home">View ERP</a>
+          </div>
+        </article>
+        <article class="featured-project secondary-project">
+          <div class="project-copy">
+            <p class="tag">Web app</p>
+            <h3>Timber Calculator</h3>
+            <p>A practical calculator for timber-related measurements and quick estimates.</p>
+            <a class="button primary" href="https://calculator00.pages.dev/">View Calculator</a>
+          </div>
+        </article>
+      </section>
+
+      <section id="skills" class="section">
+        <div class="section-heading">
+          <p class="role">Skills</p>
+          <h2>Tools I use to build useful things</h2>
+        </div>
+        <div class="skills-grid">
+          <article><h3>Python</h3><p>Automation, scripting, parsing, reporting.</p></article>
+          <article><h3>React</h3><p>Dashboards, ERP tools, responsive UI.</p></article>
+          <article><h3>Reports</h3><p>PDF/DOCX generation with structured data.</p></article>
+          <article><h3>AI Tools</h3><p>Codex, ChatGPT, prompt workflows, developer acceleration.</p></article>
+        </div>
+      </section>
+
+      <section id="about" class="section split">
+        <div>
+          <p class="role">About</p>
+          <h2>I care about practical software.</h2>
+        </div>
+        <p>I am a B.Sc. Computer Science with Artificial Intelligence student at Rathinam Global, Coimbatore. I am looking for remote internships, freelance work, contract projects, and part-time developer roles where I can ship useful tools, communicate clearly, and keep improving fast.</p>
+      </section>
+
+      <section id="contact" class="contact">
+        <div>
+          <p class="role">Contact</p>
+          <h2>Open to remote internships and freelance projects.</h2>
+        </div>
+        <div class="contact-links">
+          <a href="mailto:deepankarthick212@gmail.com">deepankarthick212@gmail.com</a>
+          <a href="https://github.com/darkraigamer212-cmd">GitHub</a>
+          <a href="https://www.linkedin.com/in/darkrai-gamer-166735374">LinkedIn</a>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

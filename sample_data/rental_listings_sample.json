@@ -1,0 +1,77 @@
+{
+  "ranked": [
+    {
+      "source": "Sample",
+      "title": "1 BHK Residential House",
+      "rent": 7000,
+      "deposit": "Rs 10,000",
+      "address": "Sample Street, Eachanari, Coimbatore",
+      "locality": "Eachanari",
+      "maps": "https://www.google.com/maps/search/?api=1&query=Eachanari%2C%20Coimbatore",
+      "directions": "https://www.google.com/maps/dir/?api=1&origin=Rathinam%20Technical%20Campus&destination=Eachanari%2C%20Coimbatore",
+      "distance": 2.2,
+      "time": "8 min",
+      "furnished": "Semi-Furnished",
+      "parking": "Bike parking",
+      "water": "Ask owner",
+      "internet": "Confirm fibre by exact door number",
+      "contact": "Owner contact hidden by portal",
+      "area": "520 sqft",
+      "posted": "Sample data",
+      "url": "https://example.com/sample-eachanari-1bhk",
+      "type": "Residential House",
+      "bedrooms": "1"
+    },
+    {
+      "source": "Sample",
+      "title": "2 BHK Apartment",
+      "rent": 9500,
+      "deposit": "Not public",
+      "address": "Sample Road, Kurichi, Coimbatore",
+      "locality": "Kurichi",
+      "maps": "https://www.google.com/maps/search/?api=1&query=Kurichi%2C%20Coimbatore",
+      "directions": "https://www.google.com/maps/dir/?api=1&origin=Rathinam%20Technical%20Campus&destination=Kurichi%2C%20Coimbatore",
+      "distance": 6.4,
+      "time": "15 min",
+      "furnished": "Unfurnished",
+      "parking": "Ask owner",
+      "water": "Ask owner",
+      "internet": "Confirm fibre by exact door number",
+      "contact": "Contact form",
+      "area": "760 sqft",
+      "posted": "Sample data",
+      "url": "https://example.com/sample-kurichi-2bhk",
+      "type": "Apartment",
+      "bedrooms": "2"
+    },
+    {
+      "source": "Sample",
+      "title": "1 BHK Flat",
+      "rent": 8500,
+      "deposit": "Rs 25,000",
+      "address": "Sample Nagar, Malumichampatti, Coimbatore",
+      "locality": "Malumichampatti",
+      "maps": "https://www.google.com/maps/search/?api=1&query=Malumichampatti%2C%20Coimbatore",
+      "directions": "https://www.google.com/maps/dir/?api=1&origin=Rathinam%20Technical%20Campus&destination=Malumichampatti%2C%20Coimbatore",
+      "distance": 5.1,
+      "time": "12 min",
+      "furnished": "Unfurnished",
+      "parking": "Bike parking",
+      "water": "Ask owner",
+      "internet": "Confirm fibre by exact door number",
+      "contact": "Owner contact hidden by portal",
+      "area": "610 sqft",
+      "posted": "Sample data",
+      "url": "https://example.com/sample-malumichampatti-1bhk",
+      "type": "Apartment",
+      "bedrooms": "1"
+    }
+  ],
+  "sources": [
+    [
+      "Sample data",
+      "Offline demo",
+      "sample_data/rental_listings_sample.json"
+    ]
+  ]
+}
