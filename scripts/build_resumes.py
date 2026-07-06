@@ -84,9 +84,9 @@ ATS = {
         (
             "Skills",
             [
-                "Languages: Python, JavaScript, HTML, CSS",
-                "Frameworks and libraries: React, Vite, Supabase, Django basics, ReportLab, python-docx",
-                "Tools: Git, GitHub, GitHub Actions, VS Code, Codex, ChatGPT, CLI tools, AI-assisted development",
+                "Languages: Python, JavaScript, HTML, CSS, TypeScript basics",
+                "Frameworks and libraries: React, Vite, Supabase, Django basics, ReportLab, python-docx, GSAP basics, Framer Motion basics",
+                "Tools: Git, GitHub, GitHub Actions, VS Code, Codex, ChatGPT, CLI tools, AI-assisted development, Docker basics",
                 "Technical areas: REST APIs, PostgreSQL, ERP development, dashboard development, responsive web design, UI/UX design, automation, PDF/DOCX generation, prompt engineering, basic testing, CI/CD basics, technical documentation",
             ],
         ),
@@ -163,7 +163,7 @@ STARTUP = {
         (
             "Skills",
             [
-                "Python, JavaScript, React, Vite, Supabase, Django basics, HTML, CSS, REST APIs, PostgreSQL, Git, GitHub, GitHub Actions, Codex, ChatGPT, AI-assisted development, prompt engineering, ERP development, dashboard development, business software, automation, PDF/DOCX generation, responsive web design, UI/UX design, basic testing, CI/CD basics, CLI tools, technical documentation"
+                "Python, JavaScript, React, Vite, Supabase, Django basics, HTML, CSS, TypeScript basics, REST APIs, PostgreSQL, Git, GitHub, GitHub Actions, Docker basics, Codex, ChatGPT, AI-assisted development, prompt engineering, ERP development, dashboard development, business software, automation, PDF/DOCX generation, responsive web design, UI/UX design, basic testing, CI/CD basics, CLI tools, technical documentation, GSAP basics, Framer Motion basics"
             ],
         ),
         (

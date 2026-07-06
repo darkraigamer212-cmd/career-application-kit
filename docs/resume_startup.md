@@ -47,7 +47,7 @@ Tech: React, Supabase, JavaScript, Vite, business workflows, dashboard developme
 
 ## Skills
 
-Python, JavaScript, React, Vite, Supabase, HTML, CSS, REST APIs, PostgreSQL, Git, GitHub, GitHub Actions, Codex, ChatGPT, AI-assisted development, prompt engineering, ERP development, dashboard development, business software, automation, PDF/DOCX generation, responsive web design, UI/UX design, basic testing, CI/CD basics, CLI tools, technical documentation, Django basics
+Python, JavaScript, React, Vite, Supabase, HTML, CSS, TypeScript basics, REST APIs, PostgreSQL, Git, GitHub, GitHub Actions, Docker basics, Codex, ChatGPT, AI-assisted development, prompt engineering, ERP development, dashboard development, business software, automation, PDF/DOCX generation, responsive web design, UI/UX design, basic testing, CI/CD basics, CLI tools, technical documentation, Django basics, GSAP basics, Framer Motion basics
 
 ## Work Style
 

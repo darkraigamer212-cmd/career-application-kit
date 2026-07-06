@@ -5,3 +5,6 @@ __pycache__/
 Thumbs.db
 profile_data.json
 tmp/
+node_modules/
+portfolio-src/node_modules/
+.pnpm-store/

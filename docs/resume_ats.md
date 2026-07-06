@@ -8,11 +8,11 @@ Computer Science with Artificial Intelligence student building practical Python 
 
 ## Skills
 
-Languages: Python, JavaScript, HTML, CSS
+Languages: Python, JavaScript, HTML, CSS, TypeScript basics
 
-Frameworks and Libraries: React, Vite, Supabase, ReportLab, python-docx, Django basics
+Frameworks and Libraries: React, Vite, Supabase, ReportLab, python-docx, Django basics, GSAP basics, Framer Motion basics
 
-Tools: Git, GitHub, GitHub Actions, VS Code, Codex, ChatGPT, CLI tools, AI-assisted development
+Tools: Git, GitHub, GitHub Actions, VS Code, Codex, ChatGPT, CLI tools, AI-assisted development, Docker basics
 
 Technical Areas: AI automation, REST APIs, PostgreSQL, ERP development, dashboard development, responsive web design, UI/UX design, business software, PDF/DOCX generation, prompt engineering, basic testing, CI/CD basics, technical documentation
 
