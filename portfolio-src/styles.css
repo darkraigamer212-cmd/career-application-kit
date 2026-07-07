@@ -514,6 +514,36 @@ h4 {
   margin-bottom: 0;
 }
 
+.aic-callout {
+  padding-top: 48px;
+}
+
+.aic-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 28px;
+  align-items: center;
+  padding: 28px;
+}
+
+.aic-card h2 {
+  margin-bottom: 12px;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+}
+
+.aic-card p:not(.section-label) {
+  max-width: 760px;
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
+.aic-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 220px;
+}
+
 .project-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -535,32 +565,30 @@ h4 {
   text-transform: uppercase;
 }
 
-.mock-strip {
-  display: grid;
-  grid-template-columns: 1.2fr 0.7fr 0.5fr;
-  gap: 8px;
-  height: 72px;
+.project-shot {
+  position: relative;
+  height: 178px;
   margin: 16px 0;
-}
-
-.mock-strip span {
+  overflow: hidden;
   border: 1px solid rgba(125, 221, 255, 0.15);
-  border-radius: 10px;
-  background:
-    linear-gradient(135deg, rgba(0, 229, 255, 0.18), transparent),
-    rgba(2, 9, 24, 0.76);
+  border-radius: 12px;
+  background: rgba(2, 9, 24, 0.76);
 }
 
-.mock-strip span:nth-child(2) {
-  background:
-    linear-gradient(135deg, rgba(124, 60, 255, 0.26), transparent),
-    rgba(2, 9, 24, 0.76);
+.project-shot img,
+.proof-shot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.mock-strip span:nth-child(3) {
-  background:
-    linear-gradient(135deg, rgba(51, 255, 204, 0.18), transparent),
-    rgba(2, 9, 24, 0.76);
+.project-shot::after {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  content: "";
+  background: linear-gradient(180deg, transparent 58%, rgba(2, 9, 24, 0.62));
 }
 
 ul {
@@ -599,6 +627,38 @@ ul {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
+}
+
+.proof-shot-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.proof-shot {
+  margin: 0;
+}
+
+.proof-shot img {
+  height: 220px;
+  border-bottom: 1px solid rgba(125, 221, 255, 0.14);
+}
+
+.proof-shot figcaption {
+  display: grid;
+  gap: 4px;
+  padding: 16px;
+}
+
+.proof-shot figcaption strong {
+  color: var(--text);
+}
+
+.proof-shot figcaption span {
+  color: var(--cyan);
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-transform: uppercase;
 }
 
 .skill-card {
@@ -724,8 +784,17 @@ ul {
 
   .project-grid,
   .skill-matrix,
-  .proof-grid {
+  .proof-grid,
+  .proof-shot-grid {
     grid-template-columns: 1fr;
+  }
+
+  .aic-card {
+    grid-template-columns: 1fr;
+  }
+
+  .aic-actions {
+    min-width: 0;
   }
 
   .trust-list ul {

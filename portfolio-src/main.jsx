@@ -18,6 +18,15 @@ const links = {
   caseStudy: "../docs/project_case_study_rental_research.md"
 };
 
+const screenshots = {
+  portfolioHome: "./assets/screenshots/portfolio-home.png",
+  oneTapLinks: "./assets/screenshots/one-tap-links.png",
+  resumePreview: "./assets/screenshots/resume-preview.png",
+  rentalReport: "./assets/screenshots/rental-research-report.png",
+  printingErp: "./assets/screenshots/printing-erp-dashboard.png",
+  calculator: "./assets/screenshots/timber-calculator.png"
+};
+
 const proofPoints = [
   { label: "Strongest proof", value: "Python rental research generator with tests and PDF output" },
   { label: "Business proof", value: "React/Supabase ERP-style workflow demo" },
@@ -36,6 +45,8 @@ const projects = [
   {
     name: "Rental Research Report Generator",
     type: "Python automation",
+    image: screenshots.rentalReport,
+    imageAlt: "Generated rental research report preview",
     problem: "Rental searches were scattered across noisy listings and hard to compare.",
     businessValue: "Turns a messy real-life decision into a ranked report that a family or reviewer can inspect.",
     proof: "Runnable offline demo, unit tests, sample PDF, case study, and generated report assets.",
@@ -47,6 +58,8 @@ const projects = [
   {
     name: "Printing Press ERP / Business Management System",
     type: "React business software",
+    image: screenshots.printingErp,
+    imageAlt: "Public printing press business workflow website screenshot",
     problem: "Local-business operations need structured workflow screens, not just static pages.",
     businessValue: "Shows practical thinking about inventory, production, order operations, dashboards, and business users.",
     proof: "Public demo route plus portfolio/resume explanation; source stays private unless approved.",
@@ -58,6 +71,8 @@ const projects = [
   {
     name: "Career Application Kit / Portfolio System",
     type: "Career proof system",
+    image: screenshots.portfolioHome,
+    imageAlt: "Trust-focused portfolio homepage screenshot",
     problem: "Applications, resumes, links, and proof assets were scattered.",
     businessValue: "Packages proof into one recruiter-friendly system with resumes, links, trackers, reports, and project evidence.",
     proof: "Public portfolio, one-tap link page, generated resumes, application packs, and GitHub documentation.",
@@ -67,8 +82,10 @@ const projects = [
     links: [{ label: "Open One-tap Links", href: "links.html" }, { label: "Review GitHub", href: links.github }]
   },
   {
-    name: "Timber Calculator",
+    name: "Curtain & Wallpaper Calculator",
     type: "Commercial calculator",
+    image: screenshots.calculator,
+    imageAlt: "Curtain and wallpaper calculator live site screenshot",
     problem: "Measurement-heavy local business tasks need quick, practical estimates.",
     businessValue: "Shows ability to build small workflow tools for local business tasks.",
     proof: "Public live demo.",
@@ -77,6 +94,15 @@ const projects = [
     learned: "Small tools become useful when the interface stays focused on the working task.",
     links: [{ label: "Open Live Demo", href: links.calculator }]
   }
+];
+
+const proofGallery = [
+  { title: "Portfolio homepage", detail: "Trust-focused first screen", image: screenshots.portfolioHome },
+  { title: "One-tap links", detail: "WhatsApp-shareable profile hub", image: screenshots.oneTapLinks },
+  { title: "ATS resume", detail: "One-page PDF preview", image: screenshots.resumePreview },
+  { title: "Rental report output", detail: "Generated report proof", image: screenshots.rentalReport },
+  { title: "ERP/business workflow", detail: "Public proof route", image: screenshots.printingErp },
+  { title: "Commercial calculator", detail: "Live calculator proof", image: screenshots.calculator }
 ];
 
 const skillGroups = [
@@ -149,8 +175,10 @@ function PortfolioPage() {
     <main>
       <CyberHero />
       <TrustOverview />
+      <AicRaiseReady />
       <About />
       <Projects />
+      <ProofGallery />
       <SkillMatrix />
       <Timeline />
       <LinkHub />
@@ -233,6 +261,25 @@ function TrustOverview() {
   );
 }
 
+function AicRaiseReady() {
+  return (
+    <section className="section-shell aic-callout">
+      <motion.div className="neon-card aic-card" {...fadeUp}>
+        <div>
+          <p className="section-label">AIC RAISE ready</p>
+          <h2>Available for flexible internship / startup project work.</h2>
+          <p>React dashboards, Python automation, ERP/internal tools, AI-assisted software workflows, PDF/DOCX/report generation, and practical business software.</p>
+        </div>
+        <div className="aic-actions">
+          <MotionLink className="button primary" href="links.html">View one-tap profile</MotionLink>
+          <MotionLink className="button" href={links.atsResume}>Download resume</MotionLink>
+          <MotionLink className="button ghost" href={links.email}>Contact me</MotionLink>
+        </div>
+      </motion.div>
+    </section>
+  );
+}
+
 function About() {
   return (
     <section id="about" className="section-shell two-column">
@@ -273,9 +320,9 @@ function ProjectCard({ project, index }) {
         <span>0{index + 1}</span>
       </div>
       <h3>{project.name}</h3>
-      <div className="mock-strip" aria-hidden="true">
-        <span></span><span></span><span></span>
-      </div>
+      <figure className="project-shot">
+        <img src={project.image} alt={project.imageAlt} />
+      </figure>
       <p><strong>Problem:</strong> {project.problem}</p>
       <p><strong>Business value:</strong> {project.businessValue}</p>
       <p><strong>Proof:</strong> {project.proof}</p>
@@ -295,6 +342,28 @@ function ProjectCard({ project, index }) {
         )) : <span className="private-link">No public link yet</span>}
       </div>
     </motion.article>
+  );
+}
+
+function ProofGallery() {
+  return (
+    <section className="section-shell">
+      <motion.div className="section-heading" {...fadeUp}>
+        <p className="section-label">Screenshot proof</p>
+        <h2>Real screens and generated outputs reviewers can inspect.</h2>
+      </motion.div>
+      <div className="proof-shot-grid">
+        {proofGallery.map((item) => (
+          <motion.figure className="proof-shot neon-card" key={item.title} {...fadeUp}>
+            <img src={item.image} alt={`${item.title} screenshot`} />
+            <figcaption>
+              <strong>{item.title}</strong>
+              <span>{item.detail}</span>
+            </figcaption>
+          </motion.figure>
+        ))}
+      </div>
+    </section>
   );
 }
 
