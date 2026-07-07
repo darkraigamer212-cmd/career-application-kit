@@ -2,6 +2,20 @@
 
 Python automation project that collects rental listing data, ranks nearby housing options, and generates decision-ready PDF/DOCX reports for a temporary student stay near Rathinam Technical Campus, Coimbatore.
 
+## Recruiter / Founder Review Path
+
+This repository is both my strongest technical proof and part of my career application kit. Start here if you are reviewing me for a remote internship, freelance project, part-time role, or startup work.
+
+- Strongest project proof: Rental Research Report Generator
+- Portfolio: `portfolio/index.html`
+- One-tap links page: `portfolio/links.html`
+- ATS resume: `docs/generated/karthik_ats_resume.pdf`
+- Startup resume: `docs/generated/karthik_startup_resume.pdf`
+- Project case study: `docs/project_case_study_rental_research.md`
+- GitHub profile README draft: `docs/github_profile_readme.md`
+
+30-second summary: I build practical Python automation, React dashboards, ERP-style workflow tools, and PDF/DOCX report generators. The Rental Research project shows parsing, filtering, scoring, generated reports, offline sample data, and tests.
+
 ## What It Does
 
 - Searches public rental portals for nearby 1BHK/2BHK houses and flats.
@@ -20,6 +34,14 @@ This is not just a PDF script. It shows practical developer skills employers and
 - PDF/DOCX generation
 - Localized multilingual output
 - Real-world decision support
+
+## Proof You Can Inspect
+
+- Source code for parsing, filtering, scoring, and report generation.
+- Offline sample data for repeatable review.
+- Unit tests for scoring, distance helpers, CLI parsing, listing normalization, and parser fixtures.
+- Generated PDF report previews under `output/pdf/`.
+- Case study explaining the problem, constraints, approach, limitations, and next improvements.
 
 ## Tech Stack
 

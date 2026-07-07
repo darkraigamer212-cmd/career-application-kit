@@ -6,13 +6,13 @@ Python automation + React dashboards + practical business software
 
 ## Profile
 
-I build practical tools that turn messy work into usable software: ranked lists, PDF/DOCX reports, React dashboards, ERP-style workflows, automations, and AI-assisted development systems. I am looking for remote internships, freelance projects, contract work, and part-time developer roles where speed, ownership, and clear communication matter.
+I build practical tools that turn messy work into usable software: ranked lists, PDF/DOCX reports, React dashboards, ERP-style workflows, automations, and AI-assisted development workflows with manual verification. I am looking for remote internships, freelance projects, contract work, and part-time developer roles where speed, ownership, and clear communication matter.
 
 ## What I Can Help With
 
 - Python scripts that automate repetitive workflows
 - PDF/DOCX report generation
-- React dashboards and portfolio pages
+- React dashboards and internal-tool screens
 - Data cleanup and structured summaries
 - Internal tools for small teams
 - AI-assisted prototyping, prompt workflows, documentation, and testing
@@ -21,7 +21,7 @@ I build practical tools that turn messy work into usable software: ranked lists,
 
 ### Rental Research Report Generator
 
-Built a Python tool that researches rental listings, filters noisy results, ranks suitable houses, and generates decision reports in English and Tamil.
+Built a Python tool that normalizes rental listing data, filters noisy results, ranks suitable houses, and generates decision reports in English and Tamil.
 
 Impact:
 
@@ -29,13 +29,13 @@ Impact:
 - Turned public listing data into a ranked report with budget and commute logic.
 - Produced family-ready outputs: PDF, DOCX, Markdown, and WhatsApp summary.
 - Included real-world safeguards: water, internet, safety, deposit, and agreement verification checklist.
-- Added offline sample data and tests so the project can be shown reliably.
+- Added offline sample data and unit tests so the project can be shown reliably without live portals.
 
 Tech: Python, ReportLab, python-docx, JSON, CLI, web parsing
 
 ### Printing Press ERP / Business Management System
 
-Built and deployed a practical business management system for printing press workflows, operational tracking, dashboards, role-based access, and order operations.
+Built and deployed practical React/Supabase business software for printing press workflows, operational tracking, dashboards, role-based access concepts, and order operations.
 
 Impact:
 
@@ -54,6 +54,7 @@ Python, JavaScript, React, Vite, Supabase, HTML, CSS, TypeScript basics, REST AP
 - I communicate progress clearly.
 - I document setup and usage.
 - I prefer small working versions over vague big promises.
+- I verify AI-assisted work before treating it as finished.
 - I can learn fast when the problem is real.
 
 ## Education

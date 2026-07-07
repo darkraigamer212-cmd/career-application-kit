@@ -18,51 +18,64 @@ const links = {
   caseStudy: "../docs/project_case_study_rental_research.md"
 };
 
+const proofPoints = [
+  { label: "Strongest proof", value: "Python rental research generator with tests and PDF output" },
+  { label: "Business proof", value: "React/Supabase ERP-style workflow demo" },
+  { label: "Ready to review", value: "ATS resume, startup resume, GitHub, LinkedIn, one-tap links" }
+];
+
+const trustSignals = [
+  "Offline sample data and unit tests for reliable demos",
+  "Generated PDF/DOCX reports, not only screenshots",
+  "Project case study explains problem, constraints, approach, and limits",
+  "Skills grouped honestly, with beginner tools labeled as basics",
+  "Open to remote internships, part-time work, freelance, and contract projects"
+];
+
 const projects = [
   {
     name: "Rental Research Report Generator",
     type: "Python automation",
     problem: "Rental searches were scattered across noisy listings and hard to compare.",
-    features: ["Filters unsuitable listings", "Ranks by budget and commute fit", "Generates English/Tamil PDF and DOCX reports", "Includes verification checklists and source links"],
+    businessValue: "Turns a messy real-life decision into a ranked report that a family or reviewer can inspect.",
+    proof: "Runnable offline demo, unit tests, sample PDF, case study, and generated report assets.",
+    features: ["Normalizes public listing data", "Filters unsuitable listings", "Ranks by budget and commute fit", "Generates English/Tamil PDF and DOCX reports"],
     stack: ["Python", "ReportLab", "python-docx", "JSON", "unittest"],
     learned: "How to turn messy public data into a repeatable decision-support workflow.",
-    links: [{ label: "GitHub", href: links.github }, { label: "Sample PDF", href: links.samplePdf }, { label: "Case Study", href: links.caseStudy }]
+    links: [{ label: "Review Source", href: links.github }, { label: "Open Sample PDF", href: links.samplePdf }, { label: "Read Case Study", href: links.caseStudy }]
   },
   {
     name: "Printing Press ERP / Business Management System",
     type: "React business software",
     problem: "Local-business operations need structured workflow screens, not just static pages.",
+    businessValue: "Shows practical thinking about inventory, production, order operations, dashboards, and business users.",
+    proof: "Public demo route plus portfolio/resume explanation; source stays private unless approved.",
     features: ["Order workflow thinking", "Inventory and production tracking", "Dashboard-style operational views", "Role-based access concepts"],
     stack: ["React", "Supabase", "JavaScript", "Vite", "ERP workflows"],
     learned: "Business software must be simple enough for daily use and structured enough for operations.",
-    links: [{ label: "Live ERP", href: links.erp }]
+    links: [{ label: "Open Live ERP", href: links.erp }]
+  },
+  {
+    name: "Career Application Kit / Portfolio System",
+    type: "Career proof system",
+    problem: "Applications, resumes, links, and proof assets were scattered.",
+    businessValue: "Packages proof into one recruiter-friendly system with resumes, links, trackers, reports, and project evidence.",
+    proof: "Public portfolio, one-tap link page, generated resumes, application packs, and GitHub documentation.",
+    features: ["ATS and startup resumes", "Portfolio and one-tap links", "Application packs and tracker", "Tests, scripts, reports, and public proof"],
+    stack: ["React", "Python", "GitHub Pages", "Docs", "Automation"],
+    learned: "A career system is stronger when every claim links back to proof.",
+    links: [{ label: "Open One-tap Links", href: "links.html" }, { label: "Review GitHub", href: links.github }]
   },
   {
     name: "Timber Calculator",
     type: "Commercial calculator",
     problem: "Measurement-heavy local business tasks need quick, practical estimates.",
+    businessValue: "Shows ability to build small workflow tools for local business tasks.",
+    proof: "Public live demo.",
     features: ["Fast calculation flow", "Simple commercial UI", "Mobile-friendly layout", "Direct public demo"],
     stack: ["JavaScript", "HTML", "CSS", "Responsive UI"],
     learned: "Small tools become useful when the interface stays focused on the working task.",
-    links: [{ label: "Live Demo", href: links.calculator }]
-  },
-  {
-    name: "Wedding Card Studio",
-    type: "Creative web tool",
-    problem: "Custom invitation workflows need structured layout and fast preview thinking.",
-    features: ["Card layout workflow", "Editable text/content planning", "Design preview thinking", "AI-assisted creative iteration"],
-    stack: ["React planning", "JavaScript", "UI design", "AI-assisted workflow"],
-    learned: "Creative tools need both visual polish and clear editing controls.",
-    links: []
-  },
-  {
-    name: "Career Application Kit / Portfolio System",
-    type: "Career operating system",
-    problem: "Applications, resumes, links, and proof assets were scattered.",
-    features: ["ATS and startup resumes", "Portfolio and one-tap links", "Application packs and tracker", "Tests, scripts, reports, and public proof"],
-    stack: ["Python", "React", "GitHub Pages", "Docs", "Automation"],
-    learned: "A career system is stronger when every claim links back to proof.",
-    links: [{ label: "GitHub", href: links.github }, { label: "One-tap Links", href: "links.html" }]
+    links: [{ label: "Open Live Demo", href: links.calculator }]
   }
 ];
 
@@ -135,6 +148,7 @@ function PortfolioPage() {
   return (
     <main>
       <CyberHero />
+      <TrustOverview />
       <About />
       <Projects />
       <SkillMatrix />
@@ -164,15 +178,22 @@ function CyberHero() {
   return (
     <section id="home" className="hero section-shell">
       <motion.div className="hero-copy" {...fadeUp}>
-        <p className="signal">CS with AI student / software developer / AI-assisted builder</p>
-        <h1>Practical software in a neon system shell.</h1>
-        <p className="lead">I build practical business software, dashboards, automation tools, and ERP-style systems.</p>
+        <p className="signal">B.Sc. CS (AI) student / Python automation / React dashboards</p>
+        <h1>Practical software for messy business workflows.</h1>
+        <p className="lead">I build Python report generators, React dashboards, ERP-style workflow tools, and one-tap proof systems for remote internships, freelance work, and startup teams.</p>
         <div className="button-row">
-          <MotionLink className="button primary" href="#projects">View Projects</MotionLink>
-          <MotionLink className="button" href={links.atsResume}>Resume</MotionLink>
-          <MotionLink className="button" href={links.github}>GitHub</MotionLink>
+          <MotionLink className="button primary" href="#proof">30-second Proof</MotionLink>
+          <MotionLink className="button" href={links.atsResume}>ATS Resume</MotionLink>
+          <MotionLink className="button" href={links.github}>Review GitHub</MotionLink>
           <MotionLink className="button" href={links.linkedin}>LinkedIn</MotionLink>
           <MotionLink className="button ghost" href="links.html">One-tap Links</MotionLink>
+        </div>
+        <div className="proof-strip" aria-label="Recruiter proof summary">
+          <span>Python automation</span>
+          <span>React dashboards</span>
+          <span>ERP workflows</span>
+          <span>PDF/DOCX reports</span>
+          <span>Tests + sample data</span>
         </div>
       </motion.div>
 
@@ -181,6 +202,32 @@ function CyberHero() {
           <KLogo />
         </div>
         <DashboardMockup />
+      </motion.div>
+    </section>
+  );
+}
+
+function TrustOverview() {
+  return (
+    <section id="proof" className="section-shell trust-overview">
+      <motion.div className="section-heading" {...fadeUp}>
+        <p className="section-label">30-second proof</p>
+        <h2>What a recruiter or founder should trust quickly.</h2>
+        <p>Not a claim-only profile: each headline skill points to a project, output, resume, or public link.</p>
+      </motion.div>
+      <div className="proof-grid">
+        {proofPoints.map((item) => (
+          <motion.article className="proof-card" key={item.label} {...fadeUp}>
+            <span>{item.label}</span>
+            <strong>{item.value}</strong>
+          </motion.article>
+        ))}
+      </div>
+      <motion.div className="trust-list neon-card" {...fadeUp}>
+        <h3>Trust signals</h3>
+        <ul>
+          {trustSignals.map((signal) => <li key={signal}>{signal}</li>)}
+        </ul>
       </motion.div>
     </section>
   );
@@ -195,8 +242,8 @@ function About() {
       </motion.div>
       <motion.div className="copy-stack" {...fadeUp}>
         <p>I am Deepan Karthick, a B.Sc. Computer Science with Artificial Intelligence student at Rathinam Global University, Coimbatore. Expected graduation: 2028.</p>
-        <p>I started by building small practical tools and kept turning them into stronger systems: a printing press ERP, rental research automation, a career application kit, calculators, reports, and portfolio proof.</p>
-        <p>My current focus is software engineering, AI-assisted development, business software, dashboards, automation, and clear documentation.</p>
+        <p>I started with practical local problems and turned them into proof: a printing press ERP, rental research automation, calculators, generated reports, and this career application kit.</p>
+        <p>My current focus is software engineering, AI-assisted development with manual verification, business software, dashboards, automation, and clear documentation.</p>
       </motion.div>
     </section>
   );
@@ -207,7 +254,7 @@ function Projects() {
     <section id="projects" className="section-shell">
       <motion.div className="section-heading" {...fadeUp}>
         <p className="section-label">Projects</p>
-        <h2>Proof systems and project UI mockups.</h2>
+        <h2>Projects with business context and reviewable proof.</h2>
       </motion.div>
       <div className="project-grid">
         {projects.map((project, index) => (
@@ -230,6 +277,8 @@ function ProjectCard({ project, index }) {
         <span></span><span></span><span></span>
       </div>
       <p><strong>Problem:</strong> {project.problem}</p>
+      <p><strong>Business value:</strong> {project.businessValue}</p>
+      <p><strong>Proof:</strong> {project.proof}</p>
       <div>
         <h4>Features</h4>
         <ul>
@@ -295,7 +344,7 @@ function LinkHub() {
     <section id="contact" className="section-shell link-hub">
       <motion.div className="section-heading" {...fadeUp}>
         <p className="section-label">Contact / One-tap Links</p>
-        <h2>All useful links in one clean panel.</h2>
+        <h2>Everything needed to decide and contact.</h2>
         <p>Open to remote internships, flexible part-time developer work, freelance automation, React dashboards, Python tools, and business software projects.</p>
       </motion.div>
       <motion.div className="link-grid" {...fadeUp}>
@@ -324,7 +373,7 @@ function LinksPage() {
           <KLogo />
           <p className="section-label">One-tap Links</p>
           <h1>Deepan Karthick</h1>
-          <p className="lead">React dashboards, Python automation, ERP-style business software, and AI-assisted development workflows.</p>
+          <p className="lead">Python automation, React dashboards, ERP-style business software, report generation, and AI-assisted development workflows.</p>
         </motion.div>
         <motion.div className="link-grid" {...fadeUp}>
           <LinkTile label="Portfolio" detail="View projects and skills" href="index.html" />

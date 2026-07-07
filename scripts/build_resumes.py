@@ -78,33 +78,29 @@ ATS = {
         (
             "Summary",
             [
-                "Computer Science with Artificial Intelligence student with hands-on experience building Python automation tools, React business applications, ERP-style dashboards, and PDF/DOCX report generators. Seeking remote internships, part-time roles, freelance projects, or contract work involving AI automation, React, Python, internal tools, and practical business software."
+                "Computer Science with Artificial Intelligence student building Python automation tools, React dashboards, ERP-style workflows, and PDF/DOCX report generators. Strongest proof: rental research automation with filtering/scoring logic, offline sample data, generated reports, and unit tests."
             ],
         ),
         (
             "Skills",
             [
                 "Languages: Python, JavaScript, HTML, CSS, TypeScript basics",
-                "Frameworks and libraries: React, Vite, Supabase, Django basics, ReportLab, python-docx, GSAP basics, Framer Motion basics",
-                "Tools: Git, GitHub, GitHub Actions, VS Code, Codex, ChatGPT, CLI tools, AI-assisted development, Docker basics",
-                "Technical areas: REST APIs, PostgreSQL, ERP development, dashboard development, responsive web design, UI/UX design, automation, PDF/DOCX generation, prompt engineering, basic testing, CI/CD basics, technical documentation",
+                "Frontend and data: React, Vite, Supabase, ReportLab, python-docx, Django basics",
+                "Tools and areas: Git, GitHub, GitHub Actions, VS Code, CLI tools, AI-assisted development with manual verification, REST API basics, PostgreSQL basics, ERP workflows, dashboards, testing, documentation, Docker basics, GSAP basics, Framer Motion basics",
             ],
         ),
         (
-            "Projects",
+                "Projects",
             [
                 "Rental Research Report Generator | Python, ReportLab, python-docx, JSON",
-                "Built a Python automation tool that collects public rental listing data and converts it into a ranked housing decision report.",
-                "Implemented filters for rent range, listing type, commute distance, furnishing, deposit, and unsuitable categories such as PGs, hostels, and shared rooms.",
-                "Generated English and Tamil PDF/DOCX reports with ranked properties, monthly budget, first-month setup cost, verification checklist, and source links.",
-                "Used structured JSON output so reports can be regenerated and extended across multiple formats.",
-                "Portfolio Website | HTML, CSS, JavaScript",
-                "Created a clean developer portfolio for internships, freelance work, and part-time developer roles.",
-                "Highlighted project proof, skills, resume links, and contact actions in a recruiter-friendly layout.",
-                "Printing Press ERP / Business Management System | React, business workflows",
-                "Built and deployed a business management system for printing press workflows, dashboards, and operational tracking.",
-                "Timber Calculator | Web app",
-                "Built a practical calculator for timber-related measurements and quick estimates.",
+                "Built a Python automation workflow that normalizes rental listing data, filters unsuitable options, ranks matches, and generates PDF/DOCX decision reports.",
+                "Implemented scoring/filters for rent range, listing type, commute distance, furnishing, deposit practicality, and unsuitable categories.",
+                "Generated English/Tamil outputs with ranked properties, budgets, verification checklist, source links, offline sample data, and unit tests.",
+                "Printing Press ERP / Business Management System | React, Supabase, JavaScript, Vite",
+                "Built and deployed React/Supabase business software screens for printing press workflows, dashboards, and operational tracking.",
+                "Modeled local-business workflows including inventory, production tracking, order operations, and role-based access concepts.",
+                "Portfolio Website | React, Vite, Framer Motion, GSAP",
+                "Created a public developer portfolio and one-tap links page with project proof, resume links, GitHub, LinkedIn, live demos, and contact actions.",
             ],
         ),
         (
@@ -117,7 +113,7 @@ ATS = {
         (
             "Additional",
             [
-                "Availability: Remote internships, freelance work, part-time developer roles",
+                "Availability: Immediate; remote internships, freelance work, part-time developer roles, contract projects around college schedule",
                 "Languages: English, Tamil",
             ],
         ),
@@ -133,7 +129,7 @@ STARTUP = {
         (
             "Profile",
             [
-                "I build practical tools that turn messy work into usable software: ranked lists, reports, dashboards, automations, and AI-assisted workflows. I am looking for remote internships, freelance projects, and part-time developer work where speed, ownership, and clear communication matter."
+                "I build practical tools that turn messy work into usable software: ranked lists, PDF/DOCX reports, React dashboards, ERP-style workflows, automations, and AI-assisted development workflows with manual verification. I am looking for remote internships, freelance projects, contract work, and part-time developer roles where speed, ownership, and clear communication matter."
             ],
         ),
         (
@@ -141,23 +137,24 @@ STARTUP = {
             [
                 "Python scripts that automate repetitive workflows",
                 "PDF/DOCX report generation",
-                "React dashboards and portfolio pages",
+                "React dashboards and internal-tool screens",
                 "Data cleanup and structured summaries",
                 "Internal tools for small teams",
-                "AI-assisted prototyping, prompt workflows, and documentation",
+                "AI-assisted prototyping, prompt workflows, documentation, and testing",
             ],
         ),
         (
-            "Best Proof",
+                "Best Proof",
             [
                 "Rental Research Report Generator | Python, ReportLab, python-docx, JSON",
-                "Built a Python tool that researches rental listings, filters noisy results, ranks suitable houses, and generates decision reports in English and Tamil.",
+                "Built a Python tool that normalizes rental listing data, filters noisy results, ranks suitable houses, and generates decision reports in English and Tamil.",
                 "Replaced scattered rental searching with a structured shortlist.",
                 "Turned public listing data into a ranked report with budget and commute logic.",
                 "Produced family-ready outputs: PDF, DOCX, Markdown, and WhatsApp summary.",
                 "Included real-world safeguards: water, internet, safety, deposit, and agreement verification checklist.",
-                "Printing Press ERP / Business Management System | React, business workflows",
-                "Built and deployed a practical business management system for workflow tracking and operational dashboards.",
+                "Added offline sample data and unit tests so the project can be shown reliably without live portals.",
+                "Printing Press ERP / Business Management System | React, Supabase, business workflows",
+                "Built and deployed practical React/Supabase business software for workflow tracking and operational dashboards.",
             ],
         ),
         (
@@ -172,6 +169,7 @@ STARTUP = {
                 "I communicate progress clearly.",
                 "I document setup and usage.",
                 "I prefer small working versions over vague big promises.",
+                "I verify AI-assisted work before treating it as finished.",
                 "I can learn fast when the problem is real.",
             ],
         ),
