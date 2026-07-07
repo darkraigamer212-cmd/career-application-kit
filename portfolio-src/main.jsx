@@ -105,6 +105,50 @@ const proofGallery = [
   { title: "Commercial calculator", detail: "Live calculator proof", image: screenshots.calculator }
 ];
 
+const primaryLinks = [
+  { label: "View Portfolio", detail: "Full proof page", href: "index.html", variant: "primary" },
+  { label: "Download ATS Resume", detail: "One-page PDF", href: links.atsResume },
+  { label: "GitHub", detail: "Code and docs", href: links.github },
+  { label: "LinkedIn", detail: "Profile", href: links.linkedin }
+];
+
+const featuredProofLinks = [
+  {
+    title: "Printing Press ERP",
+    detail: "Business workflow site for print and packaging operations.",
+    image: screenshots.printingErp,
+    href: links.erp,
+    cta: "ERP Demo"
+  },
+  {
+    title: "Rental Research Report",
+    detail: "Python automation that ranks listings and generates reports.",
+    image: screenshots.rentalReport,
+    href: links.samplePdf,
+    cta: "Report PDF"
+  },
+  {
+    title: "Calculator",
+    detail: "Commercial measurement calculator for quick estimates.",
+    image: screenshots.calculator,
+    href: links.calculator,
+    cta: "Calculator"
+  },
+  {
+    title: "Career Portfolio / GitHub",
+    detail: "Trust-focused portfolio, resumes, proof assets, and docs.",
+    image: screenshots.portfolioHome,
+    href: links.github,
+    cta: "GitHub"
+  }
+];
+
+const secondaryLinks = [
+  { label: "Startup Resume", detail: "Project-focused PDF", href: links.startupResume },
+  { label: "Case Study", detail: "Rental research breakdown", href: links.caseStudy },
+  { label: "Sample Report", detail: "Generated PDF output", href: links.samplePdf }
+];
+
 const skillGroups = [
   { title: "Strong", items: ["React", "JavaScript", "Python", "HTML", "CSS", "Git", "GitHub", "Supabase", "Dashboards", "Automation", "ERP workflows"] },
   { title: "Working knowledge", items: ["Django basics", "PDF/DOCX generation", "Testing", "CLI tools", "REST API basics", "PostgreSQL basics", "Technical documentation"] },
@@ -436,30 +480,91 @@ function LinkHub() {
 
 function LinksPage() {
   return (
-    <main className="links-page">
-      <section className="section-shell links-hero">
-        <motion.div {...fadeUp}>
+    <main className="links-page premium-links-page">
+      <section className="links-business-card">
+        <motion.div className="links-identity" {...fadeUp}>
           <KLogo />
-          <p className="section-label">One-tap Links</p>
-          <h1>Deepan Karthick</h1>
-          <p className="lead">Python automation, React dashboards, ERP-style business software, report generation, and AI-assisted development workflows.</p>
+          <div>
+            <p className="section-label">One-tap profile</p>
+            <h1>Deepan Karthick</h1>
+            <p className="links-value">Python automation, React dashboards, ERP-style business software, and AI-assisted development workflows.</p>
+            <p className="links-subtext">B.Sc. CS with AI student building practical software for real workflows.</p>
+          </div>
         </motion.div>
-        <motion.div className="link-grid" {...fadeUp}>
-          <LinkTile label="Portfolio" detail="View projects and skills" href="index.html" />
-          <LinkTile label="ATS Resume" detail="PDF resume" href={links.atsResume} />
-          <LinkTile label="Startup Resume" detail="Project-focused PDF" href={links.startupResume} />
-          <LinkTile label="GitHub" detail="Career kit repository" href={links.github} />
-          <LinkTile label="LinkedIn" detail="Professional profile" href={links.linkedin} />
-          <LinkTile label="Email" detail="deepankarthick212@gmail.com" href={links.email} />
-          <LinkTile label="Timber Calculator" detail="Live calculator" href={links.calculator} />
-          <LinkTile label="Printing Press ERP" detail="Public demo route" href={links.erp} />
+
+        <motion.div className="primary-link-grid" {...fadeUp}>
+          {primaryLinks.map((item) => (
+            <PremiumLink key={item.label} {...item} />
+          ))}
         </motion.div>
-        <motion.div className="whatsapp-panel neon-card" {...fadeUp}>
-          <span>WhatsApp share text</span>
-          <p>Hi, I am Deepan Karthick, a B.Sc. CS (AI) student building React dashboards, Python automation, ERP-style business software, and AI-assisted tools. Portfolio: {links.portfolio}</p>
+
+        <motion.section className="quick-contact neon-card" {...fadeUp}>
+          <div>
+            <span>Email</span>
+            <a href={links.email}>deepankarthick212@gmail.com</a>
+          </div>
+          <p>Hi, I am Deepan Karthick. I build React dashboards, Python automation, ERP/internal tools, and report-generation workflows.</p>
+          <strong>Available for flexible internship / startup projects.</strong>
+        </motion.section>
+      </section>
+
+      <section className="links-section">
+        <motion.div className="links-section-heading" {...fadeUp}>
+          <p className="section-label">Featured proof</p>
+          <h2>Strongest work to review first.</h2>
+        </motion.div>
+        <div className="featured-proof-list">
+          {featuredProofLinks.map((item) => (
+            <ProofLinkCard key={item.title} {...item} />
+          ))}
+        </div>
+      </section>
+
+      <section className="links-section secondary-links-section">
+        <motion.div className="links-section-heading compact" {...fadeUp}>
+          <p className="section-label">More links</p>
+        </motion.div>
+        <motion.div className="secondary-link-grid" {...fadeUp}>
+          {secondaryLinks.map((item) => (
+            <PremiumLink key={item.label} {...item} compact />
+          ))}
+        </motion.div>
+      </section>
+
+      <section className="links-section startup-cta">
+        <motion.div className="neon-card startup-card" {...fadeUp}>
+          <h2>Looking for a flexible intern or startup project contributor?</h2>
+          <ul>
+            <li>React dashboards</li>
+            <li>Python automation</li>
+            <li>ERP / internal tools</li>
+          </ul>
+          <MotionLink className="button primary" href="index.html">Open full portfolio</MotionLink>
         </motion.div>
       </section>
     </main>
+  );
+}
+
+function PremiumLink({ label, detail, href, variant = "", compact = false }) {
+  return (
+    <MotionLink className={`premium-link ${variant} ${compact ? "compact" : ""}`} href={href}>
+      <strong>{label}</strong>
+      <span>{detail}</span>
+    </MotionLink>
+  );
+}
+
+function ProofLinkCard({ title, detail, image, href, cta }) {
+  return (
+    <motion.article className="proof-link-card neon-card" {...fadeUp}>
+      <img src={image} alt={`${title} screenshot`} />
+      <div>
+        <h3>{title}</h3>
+        <p>{detail}</p>
+        <MotionLink className="proof-link-action" href={href}>{cta}</MotionLink>
+      </div>
+    </motion.article>
   );
 }
 
