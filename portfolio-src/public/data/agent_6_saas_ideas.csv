@@ -1,0 +1,21 @@
+rank,idea,target_customer,pain_score,willingness_to_pay,difficulty,competition,distribution_difficulty,fit_with_skills,speed_to_mvp,maintenance_burden,overall_score
+1,Printing press quote and job card mini ERP,small printing presses,9,8,5,6,5,10,9,5,92
+2,Curtain wallpaper measurement quote generator,interior shops,8,8,4,4,4,10,10,4,91
+3,Wedding card proof approval and order tracker,wedding card studios,8,7,4,5,4,9,9,4,88
+4,Wholesale inventory and credit follow-up dashboard,hardware wholesalers,8,8,5,6,5,9,8,5,86
+5,College certificate and event report generator,college departments,7,7,3,5,3,9,10,3,85
+6,Textile sampling and order status board,garment units,9,8,6,6,6,8,7,6,83
+7,Small clinic appointment and billing tracker,clinics,7,7,5,7,6,7,8,7,72
+8,Logistics dispatch and POD tracker,local logistics vendors,8,7,5,6,6,8,7,5,78
+9,School attendance and parent report dashboard,schools,7,7,5,7,6,7,8,5,72
+10,PDF report generator for rental/research businesses,small agencies,7,7,4,5,5,10,9,4,82
+11,Purchase approval tracker for SMEs,manufacturing SMEs,7,7,5,5,5,8,8,5,77
+12,Service complaint tracker for appliance/local services,service shops,7,7,4,6,5,8,8,5,76
+13,GST-ready invoice export cleaner,traders,8,7,5,8,6,7,8,6,73
+14,Staff attendance and wage calculator,small factories,8,7,5,6,5,8,8,5,78
+15,Customer follow-up CRM for local shops,retail/service shops,7,7,4,7,5,9,9,4,78
+16,Quotation revision tracker for fabricators,metal/furniture fabricators,7,7,4,5,5,8,9,4,79
+17,Inventory barcode-lite mobile scanner,retail/warehouse,7,7,6,7,6,7,6,6,68
+18,Tuition center fee and attendance app,tuition centers,7,6,4,7,4,8,9,4,75
+19,Maintenance AMC reminder tool,service businesses,7,7,4,6,5,8,9,4,77
+20,Small hotel inventory purchase tracker,restaurants/hotels,7,7,5,7,6,7,7,6,69

@@ -1,0 +1,16 @@
+priority,channel,opportunity,contact_link,action,expected_value,difficulty,deadline,status,next_follow_up,notes
+1,build,Printing quote and job card demo,local project,Build polished demo with PDF quote,INR 15000-50000,medium,7 days,ready,next day,Best first sales asset
+2,AIC RAISE,Startup/project referral,https://aicraise.com/,Prepare one-page profile and ask for scoped project,INR 5000-30000,medium,7 days,not contacted,after profile ready,Do not contact until user approves
+3,Rathinam,CAMPUS department automation,https://rathinamcollege.ac.in/,Offer event report/certificate generator,INR 5000-15000,low,7 days,not contacted,after demo,Fast warm-channel path
+4,local business,Wedding card studio tracker,Sivakasi/Madurai public listings,Show Wedding Card Studio/order tracker demo,INR 8000-35000,low,14 days,researched,after demo,Use referrals first
+5,local business,Curtain wallpaper quote calculator,Coimbatore public listings,Show calculator plus PDF quote,INR 8000-30000,low,14 days,researched,after demo,Strong fit with existing calculator skills
+6,internship,Full-stack internships,https://internshala.com/internships/full-stack-development-internship/,Verify listings and apply manually,stipend varies,medium,ongoing,researched,weekly,Use full-stack resume
+7,internship,React internships,https://internshala.com/internships/reactjs-internship/,Verify listings and apply manually,stipend varies,medium,ongoing,researched,weekly,Use frontend resume
+8,internship,Python automation internships,https://internshala.com/internships/python-internship/,Verify listings and apply manually,stipend varies,medium,ongoing,researched,weekly,Use automation resume
+9,startup,Wellfound startup intern roles,https://wellfound.com/jobs,Search React/Python intern India remote,stipend/job varies,high,ongoing,researched,weekly,Competitive but relevant
+10,official,AICTE internships,https://internship.aicte-india.org/,Check student software internships,stipend varies,medium,ongoing,researched,weekly,Official channel
+11,competition,Unstop internships/hackathons,https://unstop.com/internships,Track software internships and hackathons,stipend/prizes varies,medium,ongoing,researched,weekly,Good for portfolio signals
+12,local association,CODISSIA MSME route,https://www.codissia.com/,Attend/research events and MSME pain points,INR 15000-75000,medium,30 days,researched,monthly,Use after demo exists
+13,local association,Tiruppur textile dashboard route,https://www.tea-india.org/,Find warm referral to garment unit,INR 25000-100000,high,30 days,researched,monthly,Longer cycle higher value
+14,product,Reusable ERP framework,workspace,Create shared modules and schema,INR 50000+/mo long-term,high,30 days,planned,weekly,Build after first demo
+15,CRM,Personal opportunity tracker,workspace,Build only after explicit approval,indirect,medium,no deadline,designed,none,Spec created not built

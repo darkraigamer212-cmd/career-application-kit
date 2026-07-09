@@ -11,7 +11,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: "portfolio-src/index.html",
-        links: "portfolio-src/links.html"
+        links: "portfolio-src/links.html",
+        dashboard: "portfolio-src/dashboard.html"
       }
     }
   }
