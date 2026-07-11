@@ -3,7 +3,8 @@ import { createRoot } from "react-dom/client";
 import "./dashboard.css";
 
 const portfolioUrl = "./index.html";
-const dataVersion = "20260711-industrial";
+const dataVersion = "20260711-sales-safety";
+const salesStorageKey = "dragon-os-sales-private-v2";
 
 const files = {
   master: "./data/money_opportunity_master_report.md",
@@ -17,12 +18,7 @@ const files = {
   crm: "./data/agent_8_personal_crm_spec.md",
   outcomes: "./data/outcome_log.csv",
   salesLeads: "./data/sales_leads.csv",
-  salesOffers: "./data/sales_offers.csv",
-  salesEmails: "./data/sales_email_queue.csv",
   salesBriefs: "./data/sales_company_briefs.csv",
-  salesActivity: "./data/sales_activity_log.csv",
-  salesFollowups: "./data/sales_followups.csv",
-  salesReplies: "./data/sales_replies.csv",
   salesIndustryKnowledge: "./data/sales_industry_knowledge.md"
 };
 
@@ -286,14 +282,41 @@ function applyFilters(rows, query, status) {
   return rows.filter((row) => matches(row, query)).filter((row) => status === "all" || normalizeStatus(row).includes(status));
 }
 
+function readPrivateSalesState() {
+  try {
+    return JSON.parse(localStorage.getItem(salesStorageKey)) || {};
+  } catch {
+    return {};
+  }
+}
+
+function backupLabel(meta = {}) {
+  if (meta.lastBackupAt) return `Last backup: ${new Date(meta.lastBackupAt).toLocaleString()}`;
+  if (meta.lastImportAt) return `Last import: ${new Date(meta.lastImportAt).toLocaleString()}`;
+  return "No local backup recorded";
+}
+
+function isYes(value) {
+  return ["true", "yes", "1", "on"].includes(String(value || "").toLowerCase());
+}
+
 function Overview({ data, query, status }) {
   const actions = applyFilters(data.actions, query, status);
   const topActions = [...actions].sort((a, b) => numberFrom(a.priority) - numberFrom(b.priority)).slice(0, 8);
   const hotLeads = data.leads.filter((lead) => scoreOf(lead) >= 82).length;
   const serviceFloor = data.services.reduce((sum, row) => sum + numberFrom(row.standard_price_inr), 0);
   const internshipCount = data.internships.length;
-  const saasTop = data.saas.filter((row) => Number(row.rank) <= 10).length;
   const outcomeCount = data.outcomes.length;
+  const publicSalesLeads = data.salesLeads || [];
+  const privateSales = readPrivateSalesState();
+  const privateLeads = privateSales.leads || [];
+  const privateEmails = privateSales.emails || [];
+  const freshFive = publicSalesLeads.filter((lead) => lead.daily_batch === "2026-07-11-industrial");
+  const selectedThree = freshFive.filter((lead) => lead.today_pick === "Yes");
+  const draftsAwaitingReview = privateEmails.filter((email) => email.approval_status !== "Approved" && email.sent_status !== "Sent").length;
+  const followUpsDue = privateLeads.filter((lead) => dateIsDue(lead.next_follow_up)).length;
+  const repliesWaiting = privateEmails.filter((email) => email.reply_status && email.reply_status !== "No reply").length;
+  const exactNextAction = "Buy and configure a professional sender email, then manually approve at most one outreach draft.";
 
   return (
     <div className="page-grid">
@@ -310,6 +333,32 @@ function Overview({ data, query, status }) {
           <Metric label="Tracked actions" value={data.actions.length} tone="pink" />
           <Metric label="Internship channels" value={internshipCount} tone="green" />
           <Metric label="Logged outcomes" value={outcomeCount} tone="violet" />
+        </div>
+      </section>
+
+      <section className="panel launch-safety-panel full-panel">
+        <div className="section-title">
+          <h2>Today Before Any Outreach</h2>
+          <Tag type="critical">send limit: 0 until sender ready</Tag>
+        </div>
+        <div className="launch-grid">
+          <div className="launch-primary">
+            <span>Exact next action</span>
+            <strong>{exactNextAction}</strong>
+            <p>Private sales activity is browser-local. Export a backup after each session.</p>
+          </div>
+          <Metric label="Professional sender" value="Blocked" tone="pink" />
+          <Metric label="Fresh-5 status" value={`${freshFive.length}/5`} />
+          <Metric label="Selected best 3" value={`${selectedThree.length}/3`} tone="green" />
+          <Metric label="Drafts awaiting review" value={draftsAwaitingReview} tone="violet" />
+          <Metric label="Follow-ups due" value={followUpsDue} tone="pink" />
+          <Metric label="Replies waiting" value={repliesWaiting} tone="green" />
+          <Metric label="Last backup status" value={backupLabel(privateSales.meta)} tone="cyan" />
+        </div>
+        <div className="selected-strip">
+          {selectedThree.map((lead) => (
+            <span key={lead.lead_id}>{lead.business_name}</span>
+          ))}
         </div>
       </section>
 
@@ -809,13 +858,6 @@ function WeeklyPlan({ data, query, status }) {
   );
 }
 
-const salesStorageKey = "dragon-os-sales-v1";
-
-function mergeSalesRows(freshRows, savedRows) {
-  const saved = new Map((savedRows || []).map((row) => [row.lead_id, row]));
-  return freshRows.map((row) => ({ ...row, ...(saved.get(row.lead_id) || {}) }));
-}
-
 function dateIsDue(value) {
   if (!value) return false;
   const date = new Date(`${value}T23:59:59`);
@@ -836,20 +878,54 @@ function downloadFile(filename, content, type) {
   URL.revokeObjectURL(url);
 }
 
+const privateLeadDefaults = {
+  status: "Not contacted",
+  do_not_contact: "false",
+  opt_out: "false",
+  last_contacted: "",
+  next_follow_up: "",
+  bounce_status: "Not checked",
+  local_notes: ""
+};
+
+const privateLeadFields = Object.keys(privateLeadDefaults);
+
+function mergeSalesRows(freshRows, savedRows) {
+  const saved = new Map((savedRows || []).map((row) => [row.lead_id, row]));
+  return freshRows.map((row) => {
+    const local = saved.get(row.lead_id) || {};
+    const privatePatch = privateLeadFields.reduce((acc, key) => {
+      acc[key] = local[key] ?? privateLeadDefaults[key];
+      return acc;
+    }, {});
+    return { ...row, ...privatePatch };
+  });
+}
+
+function readyCheck(lead) {
+  const sourceOk = Boolean(lead.contact_source || lead.website);
+  const verifiedOk = Boolean(lead.contact_verified_date) && lead.contact_status === "Verified";
+  const consentOk = !isYes(lead.do_not_contact) && !isYes(lead.opt_out);
+  const duplicateOk = !lead.last_contacted;
+  const bounceOk = lead.bounce_status !== "Bounced";
+  return { ready: sourceOk && verifiedOk && consentOk && duplicateOk && bounceOk, sourceOk, verifiedOk, consentOk, duplicateOk, bounceOk };
+}
+
 function Sales({ data }) {
   const [tab, setTab] = useState("Today");
   const [briefLeadId, setBriefLeadId] = useState("");
-  const [filters, setFilters] = useState({ search: "", city: "all", industry: "all", category: "all", verification: "all", due: false });
+  const [filters, setFilters] = useState({ search: "", city: "all", industry: "all", contact: "all", due: false });
   const [state, setState] = useState(() => {
     try {
       const saved = JSON.parse(localStorage.getItem(salesStorageKey));
-      if (!saved) return { leads: data.salesLeads, emails: data.salesEmails };
+      if (!saved) return { leads: mergeSalesRows(data.salesLeads, []), emails: [], meta: {} };
       return {
         leads: mergeSalesRows(data.salesLeads, saved.leads),
-        emails: mergeSalesRows(data.salesEmails, saved.emails)
+        emails: Array.isArray(saved.emails) ? saved.emails : [],
+        meta: saved.meta || {}
       };
     } catch {
-      return { leads: data.salesLeads, emails: data.salesEmails };
+      return { leads: mergeSalesRows(data.salesLeads, []), emails: [], meta: {} };
     }
   });
 
@@ -863,36 +939,24 @@ function Sales({ data }) {
     if (!matches(row, filters.search)) return false;
     if (filters.city !== "all" && row.city !== filters.city) return false;
     if (filters.industry !== "all" && row.industry !== filters.industry) return false;
-    if (filters.category !== "all" && row.priority !== filters.category) return false;
-    if (filters.verification !== "all" && row.verification !== filters.verification) return false;
-    if (filters.due && !dateIsDue(row.follow_up_date)) return false;
+    if (filters.contact !== "all" && row.contact_status !== filters.contact) return false;
+    if (filters.due && !dateIsDue(row.next_follow_up)) return false;
     return true;
-  }).sort((a, b) => Number(b.score) - Number(a.score));
+  }).sort((a, b) => (a.business_name || "").localeCompare(b.business_name || ""));
 
   const emailFor = (leadId) => emails.find((item) => item.lead_id === leadId);
-  const offers = data.salesOffers || [];
   const briefs = data.salesBriefs || [];
-  const activity = data.salesActivity || [];
-  const followups = data.salesFollowups || [];
   const industryKnowledge = data.salesIndustryKnowledge || "";
-  const dailyBatch = leads.filter((row) => String(row.notes || "").includes("Daily industrial run 2026-07-11"));
-  const dailyBest = [...dailyBatch].sort((a, b) => Number(b.score) - Number(a.score)).slice(0, 3);
-  const selectedToday = dailyBatch.filter((row) => row.priority === "A").sort((a, b) => Number(b.score) - Number(a.score)).slice(0, 3);
+  const dailyBatch = leads.filter((row) => row.daily_batch === "2026-07-11-industrial");
+  const selectedToday = dailyBatch.filter((row) => row.today_pick === "Yes");
   const todayEmails = emails.filter((row) => dailyBatch.some((lead) => lead.lead_id === row.lead_id));
-  const todayFollowups = followups.filter((row) => dailyBatch.some((lead) => lead.lead_id === row.lead_id));
   const activeBrief = briefs.find((brief) => brief.lead_id === briefLeadId);
-  const staleCount = leads.filter((row) => {
-    if (!row.last_verified) return true;
-    const checked = new Date(`${row.last_verified}T00:00:00`);
-    return !Number.isNaN(checked.getTime()) && (Date.now() - checked.getTime()) > 30 * 86400000;
-  }).length;
   const today = {
-    verify: leads.filter((row) => row.verification === "Needs manual verification" && ["A", "B"].includes(row.priority)).length,
-    approve: emails.filter((row) => row.approval_status.includes("Requires Approval")).length,
-    followups: leads.filter((row) => dateIsDue(row.follow_up_date)).length + followups.filter((row) => dateIsDue(row.follow_up_date)).length,
+    verify: leads.filter((row) => row.contact_status !== "Verified").length,
+    approve: emails.filter((row) => row.approval_status !== "Approved" && row.sent_status !== "Sent").length,
+    followups: leads.filter((row) => dateIsDue(row.next_follow_up)).length,
     replies: emails.filter((row) => row.reply_status && row.reply_status !== "No reply").length,
-    meetings: leads.filter((row) => row.status === "Meeting booked").length,
-    pipeline: leads.filter((row) => !["Won", "Lost", "Do not contact"].includes(row.status)).reduce((sum, row) => sum + numberFrom(row.estimated_value), 0)
+    meetings: leads.filter((row) => row.status === "Meeting booked").length
   };
 
   function updateLead(id, patch) {
@@ -904,13 +968,16 @@ function Sales({ data }) {
   }
 
   function exportJson() {
-    downloadFile("dragon-os-sales-backup.json", JSON.stringify(state, null, 2), "application/json");
+    const next = { ...state, meta: { ...(state.meta || {}), lastBackupAt: new Date().toISOString() } };
+    localStorage.setItem(salesStorageKey, JSON.stringify(next));
+    setState(next);
+    downloadFile("dragon-os-sales-private-backup.json", JSON.stringify(next, null, 2), "application/json");
   }
 
   function exportCsv() {
     const headers = Object.keys(leads[0] || {});
     const content = [headers.join(","), ...leads.map((row) => headers.map((key) => csvEscape(row[key])).join(","))].join("\n");
-    downloadFile("sales-pipeline-export.csv", content, "text/csv");
+    downloadFile("sales-private-local-export.csv", content, "text/csv");
   }
 
   function importJson(event) {
@@ -921,7 +988,11 @@ function Sales({ data }) {
       try {
         const next = JSON.parse(reader.result);
         if (!Array.isArray(next.leads) || !Array.isArray(next.emails)) throw new Error("Invalid pipeline backup");
-        setState(next);
+        setState({
+          leads: mergeSalesRows(data.salesLeads, next.leads),
+          emails: next.emails,
+          meta: { ...(next.meta || {}), lastImportAt: new Date().toISOString() }
+        });
       } catch (error) {
         window.alert(error.message);
       }
@@ -930,8 +1001,35 @@ function Sales({ data }) {
     event.target.value = "";
   }
 
+  function createDraft(lead) {
+    if (emailFor(lead.lead_id)) {
+      setTab("Email Queue");
+      return;
+    }
+    setState((current) => ({
+      ...current,
+      emails: [
+        ...current.emails,
+        {
+          lead_id: lead.lead_id,
+          company: lead.business_name,
+          recipient_email: lead.email || "",
+          subject_a: "",
+          email_body: "",
+          approval_status: "Draft - Requires Approval",
+          sent_status: "Not sent",
+          sent_date: "",
+          reply_status: "No reply",
+          bounce_status: "Not checked",
+          private_notes: ""
+        }
+      ]
+    }));
+    setTab("Email Queue");
+  }
+
   const tabs = ["Today", "Leads", "Email Queue", "Follow-Ups", "Replies", "Meetings", "Proposals", "Revenue", "Industry Knowledge"];
-  const rowsForTab = tab === "Follow-Ups" ? visibleLeads.filter((row) => row.follow_up_date) :
+  const rowsForTab = tab === "Follow-Ups" ? visibleLeads.filter((row) => row.next_follow_up) :
     tab === "Replies" ? visibleLeads.filter((row) => emailFor(row.lead_id)?.reply_status !== "No reply") :
     tab === "Meetings" ? visibleLeads.filter((row) => row.status === "Meeting booked") :
     tab === "Proposals" ? visibleLeads.filter((row) => ["Proposal sent", "Won", "Lost"].includes(row.status)) :
@@ -942,11 +1040,12 @@ function Sales({ data }) {
       <section className="panel sales-head">
         <div>
           <h2>Sales Pipeline</h2>
-          <p>Function-first lead verification, outreach approval, follow-ups, and revenue tracking. Changes are browser-local until exported.</p>
+          <p>Private sales activity is stored only in this browser. Export a backup after each session. Do not store customer secrets or confidential information here.</p>
+          <span className="local-warning">Browser-local storage: {backupLabel(state.meta)}</span>
         </div>
         <div className="sales-io">
           <button type="button" onClick={exportJson}>Export JSON</button>
-          <button type="button" onClick={exportCsv}>Export CSV</button>
+          <button type="button" onClick={exportCsv}>Export Local CSV</button>
           <label className="import-button">Import JSON<input type="file" accept="application/json" onChange={importJson} /></label>
         </div>
       </section>
@@ -964,52 +1063,47 @@ function Sales({ data }) {
             <button onClick={() => setTab("Email Queue")}><span>Queued today</span><strong>{todayEmails.length}</strong></button>
             <button onClick={() => setTab("Follow-Ups")}><span>Follow-ups</span><strong>{today.followups}</strong></button>
             <button onClick={() => setTab("Replies")}><span>Replies</span><strong>{today.replies}</strong></button>
+            <div><span>Max sends today</span><strong>0</strong></div>
           </section>
           <section className="panel sales-today-grid">
             <div>
               <h3>Top next action</h3>
-              <strong>Review the {selectedToday.length} selected drafts, then send only from an approved business sender.</strong>
-              <p>Today has {dailyBatch.length} researched companies, {todayEmails.length} email drafts, and {todayFollowups.length} follow-up placeholders.</p>
+              <strong>Configure a professional sender first. Until then, review only and send nothing.</strong>
+              <p>Today has {dailyBatch.length} researched companies, {selectedToday.length} selected leads, {today.approve} private drafts awaiting review, and {today.followups} follow-ups due.</p>
             </div>
             <ol>
-              <li>Verify 5 leads</li><li>Review 5 drafts</li><li>Send manually</li><li>Record status</li><li>Schedule follow-up</li>
+              <li>Confirm business sender</li><li>Verify contact source</li><li>Check opt-out flags</li><li>Approve manually</li><li>Export JSON backup</li>
             </ol>
           </section>
           <section className="panel daily-best">
-            <div className="section-title"><h2>Best 3 today</h2><Tag type={dailyBatch.length === 5 ? "green" : "medium"}>{dailyBatch.length === 5 ? "daily batch complete" : "incomplete"}</Tag></div>
+            <div className="section-title"><h2>Selected Best 3</h2><Tag type={dailyBatch.length === 5 ? "green" : "medium"}>{dailyBatch.length === 5 ? "daily batch complete" : "incomplete"}</Tag></div>
             <div className="action-list">
-              {dailyBest.map((lead, index) => (
+              {selectedToday.map((lead, index) => (
                 <article className="action-row" key={lead.lead_id}>
                   <span className="rank">{index + 1}</span>
-                  <div><strong>{lead.business_name}</strong><p>{lead.offer} · INR {Number(lead.estimated_value).toLocaleString("en-IN")}</p></div>
-                  <Tag type={priorityLabel(Number(lead.score))}>{lead.priority} · {lead.score}</Tag>
+                  <div><strong>{lead.business_name}</strong><p>{lead.generic_service_category} - {lead.contact_status}</p></div>
+                  <Tag type={readyCheck(lead).ready ? "green" : "medium"}>{readyCheck(lead).ready ? "ready gate passed" : "safety check needed"}</Tag>
                   <button type="button" onClick={() => { setBriefLeadId(lead.lead_id); setTab("Leads"); }}>Open Company Brief</button>
                 </article>
               ))}
             </div>
           </section>
-          <section className="panel sales-activity">
-            <div className="section-title"><h2>Latest Sales Activity</h2><Tag type="medium">{activity.length} logs</Tag></div>
-            <div className="action-list">
-              {activity.slice(-5).reverse().map((item) => (
-                <article className="action-row" key={`${item.timestamp}-${item.lead_id}-${item.activity_type}`}>
-                  <span className="rank">{item.lead_id}</span>
-                  <div><strong>{item.activity_type}</strong><p>{item.details}</p></div>
-                  <Tag type="medium">{item.status}</Tag>
-                </article>
-              ))}
-            </div>
+          <section className="panel privacy-notice">
+            <div className="section-title"><h2>Private Storage Notice</h2><Tag type="critical">local only</Tag></div>
+            <p>Personalized email bodies, approvals, follow-up notes, replies, meetings, proposals, and revenue notes are not loaded from public CSV files. They exist only in this browser after you type or import them.</p>
           </section>
         </>
       )}
 
       {tab === "Email Queue" ? (
         <section className="panel sales-list">
+          {!emails.length && <div className="empty-state">No private email drafts in this browser. Create a local draft from the Leads tab or import a private JSON backup.</div>}
           {emails.map((email) => (
             <article className="email-card" key={email.lead_id}>
               <div className="email-card-head"><div><strong>{email.company}</strong><span>{email.recipient_email || "Recipient needs verification"}</span></div><Tag type={email.approval_status === "Approved" ? "green" : "medium"}>{email.approval_status}</Tag></div>
-              <h3>{email.subject_a}</h3><p>{email.email_body}</p>
-              <div className="row-actions"><button onClick={() => updateEmail(email.lead_id, { approval_status: "Approved" })}>Approve</button><button onClick={() => updateEmail(email.lead_id, { approval_status: "Rejected" })}>Reject</button><button onClick={() => updateEmail(email.lead_id, { sent_status: "Sent", sent_date: new Date().toISOString().slice(0, 10) })}>Mark sent</button><button onClick={() => updateEmail(email.lead_id, { reply_status: "Positive reply" })}>Positive reply</button></div>
+              <input value={email.subject_a} placeholder="Private subject" onChange={(event) => updateEmail(email.lead_id, { subject_a: event.target.value })} />
+              <textarea value={email.email_body} placeholder="Private email body. Do not store secrets." onChange={(event) => updateEmail(email.lead_id, { email_body: event.target.value })} />
+              <div className="row-actions"><button onClick={() => updateEmail(email.lead_id, { approval_status: "Approved" })}>Approve</button><button onClick={() => updateEmail(email.lead_id, { approval_status: "Rejected" })}>Reject</button><button onClick={() => updateEmail(email.lead_id, { sent_status: "Sent", sent_date: new Date().toISOString().slice(0, 10) })}>Mark sent</button><button onClick={() => updateEmail(email.lead_id, { reply_status: "Positive reply" })}>Positive reply</button><button onClick={() => updateEmail(email.lead_id, { bounce_status: "Bounced" })}>Mark bounced</button></div>
             </article>
           ))}
         </section>
@@ -1021,12 +1115,11 @@ function Sales({ data }) {
         <section className="panel sales-table-panel">
           {activeBrief && (
             <div className="company-brief">
-              <div className="section-title"><h2>{activeBrief.company_name}</h2><Tag type={activeBrief.selected_today === "Yes" ? "green" : "medium"}>{activeBrief.selection_reason}</Tag></div>
+              <div className="section-title"><h2>{activeBrief.company_name}</h2><Tag type="green">{activeBrief.freshness_status}</Tag></div>
               <p><strong>Verified:</strong> {activeBrief.verified_observation}</p>
-              <p><strong>Hypothesis:</strong> {activeBrief.hypothesis}</p>
-              <p><strong>Discovery:</strong> {activeBrief.discovery_questions}</p>
-              <p><strong>Pilot:</strong> {activeBrief.possible_small_pilot} ({activeBrief.suggested_price_range})</p>
-              <p><strong>Risks:</strong> {activeBrief.risks}</p>
+              <p><strong>Public workflow:</strong> {activeBrief.public_workflow}</p>
+              <p><strong>Generic service:</strong> {activeBrief.generic_service_category}</p>
+              <p><strong>Public contact:</strong> {activeBrief.public_email || activeBrief.public_phone || "Needs public contact verification"}</p>
               <button type="button" onClick={() => setBriefLeadId("")}>Close brief</button>
             </div>
           )}
@@ -1034,19 +1127,17 @@ function Sales({ data }) {
             <input placeholder="Search sales records" value={filters.search} onChange={(event) => setFilters({ ...filters, search: event.target.value })} />
             <select value={filters.city} onChange={(event) => setFilters({ ...filters, city: event.target.value })}><option value="all">All cities</option>{cities.map((city) => <option key={city}>{city}</option>)}</select>
             <select value={filters.industry} onChange={(event) => setFilters({ ...filters, industry: event.target.value })}><option value="all">All industries</option>{industries.map((industry) => <option key={industry}>{industry}</option>)}</select>
-            <select value={filters.category} onChange={(event) => setFilters({ ...filters, category: event.target.value })}><option value="all">All priorities</option>{["A", "B", "C", "D"].map((item) => <option key={item}>{item}</option>)}</select>
-            <select value={filters.verification} onChange={(event) => setFilters({ ...filters, verification: event.target.value })}><option value="all">All verification</option><option>Verified</option><option>Needs manual verification</option><option>Do not contact</option></select>
+            <select value={filters.contact} onChange={(event) => setFilters({ ...filters, contact: event.target.value })}><option value="all">All contact status</option><option>Verified</option><option>Needs manual verification</option></select>
             <label><input type="checkbox" checked={filters.due} onChange={(event) => setFilters({ ...filters, due: event.target.checked })} /> Due only</label>
           </div>
-          <div className="table-wrap"><table><thead><tr><th>Lead</th><th>Signal / offer</th><th>Score</th><th>Status</th><th>Next action</th><th>Value</th><th>Actions</th></tr></thead><tbody>
-            {rowsForTab.map((lead) => { const offer = offers.find((item) => item.lead_id === lead.lead_id); return <tr key={lead.lead_id}><td><strong>{lead.business_name}</strong><small>{lead.city} · {lead.industry}<br />{lead.verification}</small></td><td>{lead.need_signal}<small>{offer?.proposed_solution || lead.offer}</small></td><td><Tag type={priorityLabel(Number(lead.score))}>{lead.priority} · {lead.score}</Tag></td><td><select value={lead.status} onChange={(event) => updateLead(lead.lead_id, { status: event.target.value })}>{["Not contacted", "Contacted", "Replied", "Meeting booked", "Proposal sent", "Won", "Lost", "Research later"].map((item) => <option key={item}>{item}</option>)}</select></td><td><input value={lead.next_action} onChange={(event) => updateLead(lead.lead_id, { next_action: event.target.value })} /><input type="date" value={lead.follow_up_date} onChange={(event) => updateLead(lead.lead_id, { follow_up_date: event.target.value })} /></td><td><input value={lead.estimated_value} onChange={(event) => updateLead(lead.lead_id, { estimated_value: event.target.value })} /></td><td><button onClick={() => updateLead(lead.lead_id, { verification: "Verified" })}>Verify</button></td></tr>; })}
+          <div className="table-wrap"><table><thead><tr><th>Lead</th><th>Public contact</th><th>Service category</th><th>Safety fields</th><th>Status / follow-up</th><th>Ready gate</th><th>Actions</th></tr></thead><tbody>
+            {rowsForTab.map((lead) => { const gate = readyCheck(lead); return <tr key={lead.lead_id}><td><strong>{lead.business_name}</strong><small>{lead.city} - {lead.industry}<br />{lead.contact_status}</small></td><td><a href={lead.website}>{lead.website}</a><small>{lead.email || lead.phone || "Public contact needed"}</small><input value={lead.contact_source || ""} placeholder="Public contact source" onChange={(event) => updateLead(lead.lead_id, { contact_source: event.target.value })} /><input type="date" value={lead.contact_verified_date || ""} onChange={(event) => updateLead(lead.lead_id, { contact_verified_date: event.target.value, contact_status: event.target.value ? "Verified" : lead.contact_status })} /></td><td>{lead.generic_service_category}</td><td><label><input type="checkbox" checked={isYes(lead.do_not_contact)} onChange={(event) => updateLead(lead.lead_id, { do_not_contact: String(event.target.checked) })} /> do_not_contact</label><label><input type="checkbox" checked={isYes(lead.opt_out)} onChange={(event) => updateLead(lead.lead_id, { opt_out: String(event.target.checked) })} /> opt_out</label><select value={lead.bounce_status} onChange={(event) => updateLead(lead.lead_id, { bounce_status: event.target.value })}>{["Not checked", "No bounce", "Bounced"].map((item) => <option key={item}>{item}</option>)}</select></td><td><select value={lead.status} onChange={(event) => updateLead(lead.lead_id, { status: event.target.value })}>{["Not contacted", "Ready for manual review", "Contacted", "Replied", "Meeting booked", "Proposal sent", "Won", "Lost", "Research later"].map((item) => <option key={item}>{item}</option>)}</select><input type="date" value={lead.last_contacted} onChange={(event) => updateLead(lead.lead_id, { last_contacted: event.target.value })} /><input type="date" value={lead.next_follow_up} onChange={(event) => updateLead(lead.lead_id, { next_follow_up: event.target.value })} /></td><td><Tag type={gate.ready ? "green" : "critical"}>{gate.ready ? "ready" : "blocked"}</Tag><small>{!gate.sourceOk ? "Missing source. " : ""}{!gate.verifiedOk ? "Verify contact. " : ""}{!gate.consentOk ? "Suppressed. " : ""}{!gate.duplicateOk ? "Already contacted. " : ""}{!gate.bounceOk ? "Bounced. " : ""}</small></td><td><button disabled={!gate.ready} onClick={() => updateLead(lead.lead_id, { status: "Ready for manual review" })}>Mark ready</button><button onClick={() => createDraft(lead)}>Local draft</button><button onClick={() => { setBriefLeadId(lead.lead_id); }}>Brief</button></td></tr>; })}
           </tbody></table></div>
         </section>
       )}
     </div>
   );
 }
-
 function App() {
   const { data, error } = useDashboardData();
   const [activePage, setActivePage] = useState("Overview");
@@ -1085,3 +1176,4 @@ function App() {
 }
 
 createRoot(document.getElementById("root")).render(<App />);
+

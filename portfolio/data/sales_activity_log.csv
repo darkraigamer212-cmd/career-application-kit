@@ -1,7 +1,0 @@
-timestamp,lead_id,activity_type,details,status,next_action
-2026-07-11 18:00,SL056,Research,Verified homepage but official contact path returned 404 and no email was found,Held,Find valid public contact before outreach
-2026-07-11 18:02,SL057,Research,Verified Deccan Pumps official contact email phone address and product categories,Draft queued,Review sender gate before sending
-2026-07-11 18:04,SL058,Research,Verified Pricol official contact and manufacturing pages but marked higher access risk,Research more,Find right department before cold email
-2026-07-11 18:06,SL059,Research,Verified Aqua Group official enquiry email phone divisions and manufacturing page,Draft queued,Review sender gate before sending
-2026-07-11 18:08,SL060,Research,Verified SEForge official contact email phone and casting/forging positioning,Draft queued,Review sender gate before sending
-2026-07-11 18:10,SALES-SENDER,Sender gate,Connected Gmail profile is darkraigamer212@gmail.com and not an approved business sender,Blocked,Use approved business sender before automatic sending

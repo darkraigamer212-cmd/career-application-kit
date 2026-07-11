@@ -119,8 +119,10 @@ a {
 .sales-head { display: flex; justify-content: space-between; gap: 24px; align-items: center; }
 .sales-head h2, .sales-today-grid h3, .email-card h3 { margin: 0 0 8px; }
 .sales-head p, .sales-today-grid p, .email-card p { margin: 0; color: var(--muted); line-height: 1.55; }
+.local-warning { display: block; margin-top: 10px; color: var(--amber); font-size: 13px; }
 .sales-io, .row-actions, .sales-tabs, .sales-filters { display: flex; flex-wrap: wrap; gap: 8px; }
 .sales-io button, .row-actions button, .sales-tabs button, .import-button, .sales-table-panel button { padding: 9px 12px; border: 1px solid var(--line-strong); border-radius: 6px; color: var(--text); background: var(--panel-strong); }
+.sales-table-panel button:disabled { cursor: not-allowed; opacity: 0.45; }
 .import-button input { display: none; }
 .sales-tabs { padding: 6px; border: 1px solid var(--line); background: rgba(4,9,18,.7); }
 .sales-tabs button.active { color: #001016; background: var(--cyan); border-color: var(--cyan); font-weight: 800; }
@@ -138,12 +140,58 @@ a {
 .email-card { padding: 16px; border: 1px solid var(--line); background: rgba(6,12,23,.55); }
 .email-card-head { display: flex; justify-content: space-between; gap: 12px; }
 .email-card h3 { margin-top: 14px; font-size: 15px; }
+.email-card input,
+.email-card textarea {
+  width: 100%;
+  margin-top: 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 10px;
+  color: var(--text);
+  background: var(--bg-soft);
+}
+.email-card textarea { min-height: 150px; resize: vertical; }
 .sales-filters { margin-bottom: 14px; align-items: center; }
 .sales-filters input, .sales-filters select, .sales-table-panel input, .sales-table-panel select { min-height: 36px; padding: 7px 9px; border: 1px solid var(--line); border-radius: 5px; color: var(--text); background: var(--bg-soft); }
 .sales-table-panel td input, .sales-table-panel td select { width: 100%; margin-bottom: 5px; }
 .sales-table-panel td { min-width: 110px; vertical-align: top; }
+.sales-table-panel label { display: block; margin-bottom: 8px; color: var(--muted); font-size: 12px; }
+.sales-table-panel label input { width: auto; min-height: 0; margin-right: 6px; }
+.privacy-notice p { margin-bottom: 0; color: var(--muted); line-height: 1.6; }
+
+.launch-safety-panel { display: grid; gap: 14px; }
+.launch-grid {
+  display: grid;
+  grid-template-columns: minmax(260px, 1.4fr) repeat(4, minmax(150px, 1fr));
+  gap: 12px;
+}
+.launch-primary {
+  border: 1px solid rgba(255, 209, 102, 0.38);
+  border-radius: 8px;
+  padding: 15px;
+  background: rgba(255, 209, 102, 0.08);
+}
+.launch-primary span,
+.launch-primary p { color: var(--muted); }
+.launch-primary strong {
+  display: block;
+  margin: 8px 0;
+  color: var(--amber);
+  font-size: 18px;
+  line-height: 1.35;
+}
+.selected-strip { display: flex; flex-wrap: wrap; gap: 8px; }
+.selected-strip span {
+  border: 1px solid rgba(54, 245, 179, 0.32);
+  border-radius: 999px;
+  padding: 7px 10px;
+  color: var(--green);
+  background: rgba(54, 245, 179, 0.08);
+  font-size: 13px;
+}
 
 @media (max-width: 1050px) { .sales-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 1180px) { .launch-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 700px) {
   .sales-head, .email-card-head { align-items: stretch; flex-direction: column; }
   .sales-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -151,6 +199,7 @@ a {
   .sales-today-grid ol { columns: 1; }
   .sales-tabs { overflow-x: auto; flex-wrap: nowrap; }
   .sales-tabs button { white-space: nowrap; }
+  .launch-grid { grid-template-columns: 1fr; }
 }
 
 .nav-item {
