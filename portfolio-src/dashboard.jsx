@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./dashboard.css";
 
 const portfolioUrl = "./index.html";
+const dataVersion = "20260711-industrial";
 
 const files = {
   master: "./data/money_opportunity_master_report.md",
@@ -17,7 +18,12 @@ const files = {
   outcomes: "./data/outcome_log.csv",
   salesLeads: "./data/sales_leads.csv",
   salesOffers: "./data/sales_offers.csv",
-  salesEmails: "./data/sales_email_queue.csv"
+  salesEmails: "./data/sales_email_queue.csv",
+  salesBriefs: "./data/sales_company_briefs.csv",
+  salesActivity: "./data/sales_activity_log.csv",
+  salesFollowups: "./data/sales_followups.csv",
+  salesReplies: "./data/sales_replies.csv",
+  salesIndustryKnowledge: "./data/sales_industry_knowledge.md"
 };
 
 const pages = [
@@ -156,7 +162,8 @@ function useDashboardData() {
       try {
         const entries = await Promise.all(
           Object.entries(files).map(async ([key, url]) => {
-            const response = await fetch(url);
+            const fetchUrl = `${url}${url.includes("?") ? "&" : "?"}v=${dataVersion}`;
+            const response = await fetch(fetchUrl);
             if (!response.ok) throw new Error(`${url} ${response.status}`);
             const text = await response.text();
             return [key, url.endsWith(".csv") ? parseCsv(text) : text];
@@ -804,6 +811,11 @@ function WeeklyPlan({ data, query, status }) {
 
 const salesStorageKey = "dragon-os-sales-v1";
 
+function mergeSalesRows(freshRows, savedRows) {
+  const saved = new Map((savedRows || []).map((row) => [row.lead_id, row]));
+  return freshRows.map((row) => ({ ...row, ...(saved.get(row.lead_id) || {}) }));
+}
+
 function dateIsDue(value) {
   if (!value) return false;
   const date = new Date(`${value}T23:59:59`);
@@ -826,10 +838,16 @@ function downloadFile(filename, content, type) {
 
 function Sales({ data }) {
   const [tab, setTab] = useState("Today");
+  const [briefLeadId, setBriefLeadId] = useState("");
   const [filters, setFilters] = useState({ search: "", city: "all", industry: "all", category: "all", verification: "all", due: false });
   const [state, setState] = useState(() => {
     try {
-      return JSON.parse(localStorage.getItem(salesStorageKey)) || { leads: data.salesLeads, emails: data.salesEmails };
+      const saved = JSON.parse(localStorage.getItem(salesStorageKey));
+      if (!saved) return { leads: data.salesLeads, emails: data.salesEmails };
+      return {
+        leads: mergeSalesRows(data.salesLeads, saved.leads),
+        emails: mergeSalesRows(data.salesEmails, saved.emails)
+      };
     } catch {
       return { leads: data.salesLeads, emails: data.salesEmails };
     }
@@ -853,10 +871,25 @@ function Sales({ data }) {
 
   const emailFor = (leadId) => emails.find((item) => item.lead_id === leadId);
   const offers = data.salesOffers || [];
+  const briefs = data.salesBriefs || [];
+  const activity = data.salesActivity || [];
+  const followups = data.salesFollowups || [];
+  const industryKnowledge = data.salesIndustryKnowledge || "";
+  const dailyBatch = leads.filter((row) => String(row.notes || "").includes("Daily industrial run 2026-07-11"));
+  const dailyBest = [...dailyBatch].sort((a, b) => Number(b.score) - Number(a.score)).slice(0, 3);
+  const selectedToday = dailyBatch.filter((row) => row.priority === "A").sort((a, b) => Number(b.score) - Number(a.score)).slice(0, 3);
+  const todayEmails = emails.filter((row) => dailyBatch.some((lead) => lead.lead_id === row.lead_id));
+  const todayFollowups = followups.filter((row) => dailyBatch.some((lead) => lead.lead_id === row.lead_id));
+  const activeBrief = briefs.find((brief) => brief.lead_id === briefLeadId);
+  const staleCount = leads.filter((row) => {
+    if (!row.last_verified) return true;
+    const checked = new Date(`${row.last_verified}T00:00:00`);
+    return !Number.isNaN(checked.getTime()) && (Date.now() - checked.getTime()) > 30 * 86400000;
+  }).length;
   const today = {
     verify: leads.filter((row) => row.verification === "Needs manual verification" && ["A", "B"].includes(row.priority)).length,
     approve: emails.filter((row) => row.approval_status.includes("Requires Approval")).length,
-    followups: leads.filter((row) => dateIsDue(row.follow_up_date)).length,
+    followups: leads.filter((row) => dateIsDue(row.follow_up_date)).length + followups.filter((row) => dateIsDue(row.follow_up_date)).length,
     replies: emails.filter((row) => row.reply_status && row.reply_status !== "No reply").length,
     meetings: leads.filter((row) => row.status === "Meeting booked").length,
     pipeline: leads.filter((row) => !["Won", "Lost", "Do not contact"].includes(row.status)).reduce((sum, row) => sum + numberFrom(row.estimated_value), 0)
@@ -897,7 +930,7 @@ function Sales({ data }) {
     event.target.value = "";
   }
 
-  const tabs = ["Today", "Leads", "Email Queue", "Follow-Ups", "Replies", "Meetings", "Proposals", "Revenue"];
+  const tabs = ["Today", "Leads", "Email Queue", "Follow-Ups", "Replies", "Meetings", "Proposals", "Revenue", "Industry Knowledge"];
   const rowsForTab = tab === "Follow-Ups" ? visibleLeads.filter((row) => row.follow_up_date) :
     tab === "Replies" ? visibleLeads.filter((row) => emailFor(row.lead_id)?.reply_status !== "No reply") :
     tab === "Meetings" ? visibleLeads.filter((row) => row.status === "Meeting booked") :
@@ -925,22 +958,47 @@ function Sales({ data }) {
       {tab === "Today" && (
         <>
           <section className="sales-metrics">
+            <button onClick={() => setTab("Leads")}><span>Fresh today</span><strong>{dailyBatch.length}/5</strong></button>
             <button onClick={() => setTab("Leads")}><span>Verify</span><strong>{today.verify}</strong></button>
             <button onClick={() => setTab("Email Queue")}><span>Approve</span><strong>{today.approve}</strong></button>
+            <button onClick={() => setTab("Email Queue")}><span>Queued today</span><strong>{todayEmails.length}</strong></button>
             <button onClick={() => setTab("Follow-Ups")}><span>Follow-ups</span><strong>{today.followups}</strong></button>
             <button onClick={() => setTab("Replies")}><span>Replies</span><strong>{today.replies}</strong></button>
-            <button onClick={() => setTab("Meetings")}><span>Meetings</span><strong>{today.meetings}</strong></button>
-            <div><span>Pipeline</span><strong>{currency(today.pipeline)}</strong></div>
           </section>
           <section className="panel sales-today-grid">
             <div>
               <h3>Top next action</h3>
-              <strong>Verify and approve the first five A-priority records.</strong>
-              <p>Do not send until the observation, recipient, and offer are manually checked.</p>
+              <strong>Review the {selectedToday.length} selected drafts, then send only from an approved business sender.</strong>
+              <p>Today has {dailyBatch.length} researched companies, {todayEmails.length} email drafts, and {todayFollowups.length} follow-up placeholders.</p>
             </div>
             <ol>
               <li>Verify 5 leads</li><li>Review 5 drafts</li><li>Send manually</li><li>Record status</li><li>Schedule follow-up</li>
             </ol>
+          </section>
+          <section className="panel daily-best">
+            <div className="section-title"><h2>Best 3 today</h2><Tag type={dailyBatch.length === 5 ? "green" : "medium"}>{dailyBatch.length === 5 ? "daily batch complete" : "incomplete"}</Tag></div>
+            <div className="action-list">
+              {dailyBest.map((lead, index) => (
+                <article className="action-row" key={lead.lead_id}>
+                  <span className="rank">{index + 1}</span>
+                  <div><strong>{lead.business_name}</strong><p>{lead.offer} · INR {Number(lead.estimated_value).toLocaleString("en-IN")}</p></div>
+                  <Tag type={priorityLabel(Number(lead.score))}>{lead.priority} · {lead.score}</Tag>
+                  <button type="button" onClick={() => { setBriefLeadId(lead.lead_id); setTab("Leads"); }}>Open Company Brief</button>
+                </article>
+              ))}
+            </div>
+          </section>
+          <section className="panel sales-activity">
+            <div className="section-title"><h2>Latest Sales Activity</h2><Tag type="medium">{activity.length} logs</Tag></div>
+            <div className="action-list">
+              {activity.slice(-5).reverse().map((item) => (
+                <article className="action-row" key={`${item.timestamp}-${item.lead_id}-${item.activity_type}`}>
+                  <span className="rank">{item.lead_id}</span>
+                  <div><strong>{item.activity_type}</strong><p>{item.details}</p></div>
+                  <Tag type="medium">{item.status}</Tag>
+                </article>
+              ))}
+            </div>
           </section>
         </>
       )}
@@ -955,8 +1013,23 @@ function Sales({ data }) {
             </article>
           ))}
         </section>
+      ) : tab === "Industry Knowledge" ? (
+        <section className="panel sales-knowledge">
+          <pre>{industryKnowledge}</pre>
+        </section>
       ) : tab !== "Today" && (
         <section className="panel sales-table-panel">
+          {activeBrief && (
+            <div className="company-brief">
+              <div className="section-title"><h2>{activeBrief.company_name}</h2><Tag type={activeBrief.selected_today === "Yes" ? "green" : "medium"}>{activeBrief.selection_reason}</Tag></div>
+              <p><strong>Verified:</strong> {activeBrief.verified_observation}</p>
+              <p><strong>Hypothesis:</strong> {activeBrief.hypothesis}</p>
+              <p><strong>Discovery:</strong> {activeBrief.discovery_questions}</p>
+              <p><strong>Pilot:</strong> {activeBrief.possible_small_pilot} ({activeBrief.suggested_price_range})</p>
+              <p><strong>Risks:</strong> {activeBrief.risks}</p>
+              <button type="button" onClick={() => setBriefLeadId("")}>Close brief</button>
+            </div>
+          )}
           <div className="sales-filters">
             <input placeholder="Search sales records" value={filters.search} onChange={(event) => setFilters({ ...filters, search: event.target.value })} />
             <select value={filters.city} onChange={(event) => setFilters({ ...filters, city: event.target.value })}><option value="all">All cities</option>{cities.map((city) => <option key={city}>{city}</option>)}</select>

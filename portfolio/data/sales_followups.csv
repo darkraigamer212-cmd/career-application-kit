@@ -1,0 +1,4 @@
+lead_id,company,recipient_email,trigger,status,follow_up_date,final_follow_up_date,notes
+SL057,Deccan Pumps,info@deccanpumps.com,After manual send,Pending send,,,Schedule 3 business days and 7 business days after actual send
+SL059,Aqua Group,enquiry@aquagroup.in,After manual send,Pending send,,,Schedule 3 business days and 7 business days after actual send
+SL060,SEForge,info@seforge.com,After manual send,Pending send,,,Schedule 3 business days and 7 business days after actual send

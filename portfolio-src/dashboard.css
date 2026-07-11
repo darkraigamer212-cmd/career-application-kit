@@ -124,7 +124,11 @@ a {
 .import-button input { display: none; }
 .sales-tabs { padding: 6px; border: 1px solid var(--line); background: rgba(4,9,18,.7); }
 .sales-tabs button.active { color: #001016; background: var(--cyan); border-color: var(--cyan); font-weight: 800; }
-.sales-metrics { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+.sales-metrics { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 10px; }
+.daily-best { display: grid; gap: 10px; }
+.company-brief { margin-bottom: 14px; padding: 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+.company-brief p { margin: 8px 0; color: var(--muted); line-height: 1.55; }
+.sales-knowledge pre { margin: 0; white-space: pre-wrap; color: var(--muted); font: inherit; line-height: 1.65; }
 .sales-metrics button, .sales-metrics div { min-height: 92px; padding: 15px; text-align: left; border: 1px solid var(--line); border-radius: 8px; color: var(--text); background: var(--panel); }
 .sales-metrics span, .email-card-head span, .sales-table-panel small { display: block; color: var(--muted); font-size: 12px; }
 .sales-metrics strong { display: block; margin-top: 8px; font-size: 22px; }
