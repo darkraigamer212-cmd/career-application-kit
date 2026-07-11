@@ -115,6 +115,40 @@ a {
   gap: 7px;
 }
 
+.sales-workspace { display: grid; gap: 16px; }
+.sales-head { display: flex; justify-content: space-between; gap: 24px; align-items: center; }
+.sales-head h2, .sales-today-grid h3, .email-card h3 { margin: 0 0 8px; }
+.sales-head p, .sales-today-grid p, .email-card p { margin: 0; color: var(--muted); line-height: 1.55; }
+.sales-io, .row-actions, .sales-tabs, .sales-filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.sales-io button, .row-actions button, .sales-tabs button, .import-button, .sales-table-panel button { padding: 9px 12px; border: 1px solid var(--line-strong); border-radius: 6px; color: var(--text); background: var(--panel-strong); }
+.import-button input { display: none; }
+.sales-tabs { padding: 6px; border: 1px solid var(--line); background: rgba(4,9,18,.7); }
+.sales-tabs button.active { color: #001016; background: var(--cyan); border-color: var(--cyan); font-weight: 800; }
+.sales-metrics { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+.sales-metrics button, .sales-metrics div { min-height: 92px; padding: 15px; text-align: left; border: 1px solid var(--line); border-radius: 8px; color: var(--text); background: var(--panel); }
+.sales-metrics span, .email-card-head span, .sales-table-panel small { display: block; color: var(--muted); font-size: 12px; }
+.sales-metrics strong { display: block; margin-top: 8px; font-size: 22px; }
+.sales-today-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.sales-today-grid ol { margin: 0; columns: 2; color: var(--muted); line-height: 1.9; }
+.sales-list { display: grid; gap: 12px; }
+.email-card { padding: 16px; border: 1px solid var(--line); background: rgba(6,12,23,.55); }
+.email-card-head { display: flex; justify-content: space-between; gap: 12px; }
+.email-card h3 { margin-top: 14px; font-size: 15px; }
+.sales-filters { margin-bottom: 14px; align-items: center; }
+.sales-filters input, .sales-filters select, .sales-table-panel input, .sales-table-panel select { min-height: 36px; padding: 7px 9px; border: 1px solid var(--line); border-radius: 5px; color: var(--text); background: var(--bg-soft); }
+.sales-table-panel td input, .sales-table-panel td select { width: 100%; margin-bottom: 5px; }
+.sales-table-panel td { min-width: 110px; vertical-align: top; }
+
+@media (max-width: 1050px) { .sales-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 700px) {
+  .sales-head, .email-card-head { align-items: stretch; flex-direction: column; }
+  .sales-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sales-today-grid { grid-template-columns: 1fr; }
+  .sales-today-grid ol { columns: 1; }
+  .sales-tabs { overflow-x: auto; flex-wrap: nowrap; }
+  .sales-tabs button { white-space: nowrap; }
+}
+
 .nav-item {
   display: flex;
   min-height: 42px;
@@ -229,7 +263,8 @@ h2 {
 }
 
 .search-box input,
-.top-actions select {
+.top-actions select,
+.quote-form input {
   height: 42px;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -364,7 +399,9 @@ h2 {
 .offer-stack,
 .timeline,
 .check-list,
-.question-grid {
+.question-grid,
+.outcome-list,
+.template-grid {
   display: grid;
   gap: 10px;
 }
@@ -437,7 +474,9 @@ td {
 .offer,
 .timeline div,
 .check-list span,
-.question {
+.question,
+.outcome-card,
+.template-grid span {
   border: 1px solid rgba(116, 230, 255, 0.12);
   border-radius: 8px;
   padding: 12px;
@@ -450,6 +489,164 @@ td {
   margin-top: 5px;
   color: var(--muted);
   font-size: 13px;
+}
+
+.outcome-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 12px;
+}
+
+.outcome-card strong {
+  display: block;
+  font-size: 14px;
+}
+
+.outcome-card p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.template-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.template-grid span {
+  color: var(--cyan);
+  font-size: 12px;
+}
+
+.quote-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.quote-form label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.quote-form input {
+  width: 100%;
+  padding: 0 10px;
+}
+
+.quote-preview {
+  align-self: start;
+}
+
+.quote-paper {
+  border: 1px solid rgba(54, 245, 179, 0.28);
+  border-radius: 8px;
+  padding: 16px;
+  background: rgba(4, 10, 18, 0.72);
+}
+
+.quote-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.quote-head strong,
+.job-ticket strong,
+.stage-card strong {
+  display: block;
+  font-size: 15px;
+}
+
+.quote-head span,
+.job-ticket span,
+.stage-card span {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.quote-paper dl {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+.quote-paper dl div,
+.ticket-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid rgba(116, 230, 255, 0.1);
+  padding-bottom: 8px;
+}
+
+.quote-paper dt {
+  color: var(--muted);
+}
+
+.quote-paper dd {
+  margin: 0;
+  color: var(--text);
+  text-align: right;
+}
+
+.quote-paper .quote-total {
+  border-bottom: 0;
+  color: var(--green);
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.copy-box {
+  margin-top: 16px;
+  border: 1px dashed var(--line-strong);
+  border-radius: 8px;
+  padding: 12px;
+  color: #d9e8f2;
+  background: rgba(255, 255, 255, 0.03);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.job-card-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.35fr) minmax(0, 0.65fr);
+  gap: 14px;
+}
+
+.job-ticket,
+.stage-card {
+  border: 1px solid rgba(116, 230, 255, 0.12);
+  border-radius: 8px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.job-ticket p,
+.stage-card p {
+  margin: 10px 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.stage-board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.stage-card {
+  display: grid;
+  gap: 10px;
 }
 
 .check-list {
@@ -502,7 +699,8 @@ td {
   .topbar,
   .top-actions,
   .hero-panel,
-  .page-grid {
+  .page-grid,
+  .job-card-grid {
     grid-template-columns: 1fr;
   }
 
@@ -537,7 +735,10 @@ td {
 
   .hero-metrics,
   .check-list,
-  .question-grid {
+  .question-grid,
+  .template-grid,
+  .quote-form,
+  .stage-board {
     grid-template-columns: 1fr;
   }
 
