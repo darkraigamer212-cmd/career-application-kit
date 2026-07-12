@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useDeferredValue, useEffect, useMemo, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./dashboard.css";
 
@@ -35,20 +35,11 @@ const files = {
   mbaTimeline: "./data/two_track_research/mba_application_timeline.csv"
 };
 
-const pages = [
-  "Overview",
-  "Leads",
-  "Internships",
-  "AIC RAISE / Startup",
-  "PrintExpo",
-  "Print ERP Demo",
-  "Services",
-  "SaaS Ideas",
-  "Outcomes",
-  "Business Intelligence",
-  "Global Education Strategy",
-  "Sales",
-  "Weekly Plan"
+const navGroups = [
+  { label: "Career", pages: ["Overview", "Leads", "Internships", "AIC RAISE / Startup"] },
+  { label: "Business", pages: ["Business Intelligence", "Sales", "Services", "Print ERP Demo", "PrintExpo"] },
+  { label: "Global education", pages: ["Global Education Strategy"] },
+  { label: "Planning", pages: ["Weekly Plan", "Outcomes", "SaaS Ideas"] }
 ];
 
 const statusOptions = ["all", "ready", "researched", "planned", "not contacted", "ongoing"];
@@ -195,9 +186,15 @@ function useDashboardData() {
 }
 
 function Shell({ children, activePage, setActivePage, query, setQuery, status, setStatus }) {
+  const [navOpen, setNavOpen] = useState(false);
+  const selectPage = (page) => {
+    setActivePage(page);
+    setNavOpen(false);
+  };
   return (
     <div className="app-shell">
-      <aside className="sidebar">
+      <button className="nav-toggle" type="button" aria-label="Open dashboard navigation" aria-expanded={navOpen} onClick={() => setNavOpen((open) => !open)}>Menu</button>
+      <aside className={navOpen ? "sidebar open" : "sidebar"} aria-label="Dashboard navigation">
         <a className="brand" href="./dashboard.html" aria-label="Dragon OS Mission Control">
           <span className="brand-mark">DO</span>
           <span>
@@ -206,17 +203,10 @@ function Shell({ children, activePage, setActivePage, query, setQuery, status, s
           </span>
         </a>
         <nav className="nav-list" aria-label="Dashboard pages">
-          {pages.map((page) => (
-            <button
-              key={page}
-              className={activePage === page ? "nav-item active" : "nav-item"}
-              onClick={() => setActivePage(page)}
-              type="button"
-            >
-              <span className="nav-dot" />
-              {page}
-            </button>
-          ))}
+          {navGroups.map((group) => <section className="nav-group" key={group.label} aria-label={group.label}>
+            <p>{group.label}</p>
+            {group.pages.map((page) => <button key={page} className={activePage === page ? "nav-item active" : "nav-item"} onClick={() => selectPage(page)} type="button"><span className="nav-dot" />{page}</button>)}
+          </section>)}
         </nav>
         <div className="side-card">
           <span className="label">Primary daily target</span>
@@ -261,6 +251,14 @@ function Metric({ label, value, tone = "cyan" }) {
       <strong>{value}</strong>
     </div>
   );
+}
+
+function MiniBars({ title, rows, note = "" }) {
+  const max = Math.max(...rows.map((row) => row.value), 1);
+  return <section className="mini-bars" aria-label={`${title}. ${rows.map((row) => `${row.label}: ${row.value}`).join(", ")}`}>
+    <div className="section-title"><h3>{title}</h3><span>{note}</span></div>
+    {rows.map((row) => <div className="bar-row" key={row.label}><span>{row.label}</span><div className="bar-track"><i style={{ width: `${Math.max(8, row.value / max * 100)}%` }} /></div><strong>{row.value}</strong></div>)}
+  </section>;
 }
 
 function Tag({ children, type = "neutral" }) {
@@ -316,39 +314,49 @@ function isYes(value) {
 }
 
 function Overview({ data, query, status }) {
-  const actions = applyFilters(data.actions, query, status);
-  const topActions = [...actions].sort((a, b) => numberFrom(a.priority) - numberFrom(b.priority)).slice(0, 8);
-  const hotLeads = data.leads.filter((lead) => scoreOf(lead) >= 82).length;
-  const serviceFloor = data.services.reduce((sum, row) => sum + numberFrom(row.standard_price_inr), 0);
+  const overview = useMemo(() => {
+    const actions = applyFilters(data.actions, query, status);
+    const publicSalesLeads = data.salesLeads || [];
+    const privateSales = readPrivateSalesState();
+    const privateLeads = privateSales.leads || [];
+    const privateEmails = privateSales.emails || [];
+    const freshFive = publicSalesLeads.filter((lead) => lead.daily_batch === "2026-07-11-industrial");
+    return {
+      topActions: [...actions].sort((a, b) => numberFrom(a.priority) - numberFrom(b.priority)).slice(0, 8),
+      hotLeads: data.leads.filter((lead) => scoreOf(lead) >= 82).length,
+      serviceFloor: data.services.reduce((sum, row) => sum + numberFrom(row.standard_price_inr), 0),
+      privateSales,
+      freshFive,
+      selectedThree: freshFive.filter((lead) => lead.today_pick === "Yes"),
+      draftsAwaitingReview: privateEmails.filter((email) => email.approval_status !== "Approved" && email.sent_status !== "Sent").length,
+      followUpsDue: privateLeads.filter((lead) => dateIsDue(lead.next_follow_up)).length,
+      repliesWaiting: privateEmails.filter((email) => email.reply_status && email.reply_status !== "No reply").length
+    };
+  }, [data, query, status]);
   const internshipCount = data.internships.length;
   const outcomeCount = data.outcomes.length;
-  const publicSalesLeads = data.salesLeads || [];
-  const privateSales = readPrivateSalesState();
-  const privateLeads = privateSales.leads || [];
-  const privateEmails = privateSales.emails || [];
-  const freshFive = publicSalesLeads.filter((lead) => lead.daily_batch === "2026-07-11-industrial");
-  const selectedThree = freshFive.filter((lead) => lead.today_pick === "Yes");
-  const draftsAwaitingReview = privateEmails.filter((email) => email.approval_status !== "Approved" && email.sent_status !== "Sent").length;
-  const followUpsDue = privateLeads.filter((lead) => dateIsDue(lead.next_follow_up)).length;
-  const repliesWaiting = privateEmails.filter((email) => email.reply_status && email.reply_status !== "No reply").length;
-  const exactNextAction = "Buy and configure a professional sender email, then manually approve at most one outreach draft.";
+  const exactNextAction = "Validate one printing quote-to-job case before building anything.";
 
   return (
     <div className="page-grid">
       <section className="panel hero-panel">
         <div>
           <p className="eyebrow">Founder command center</p>
-          <h2>Turn Dragon OS research into daily founder moves.</h2>
-          <p>
-            One place for career actions, local leads, startup channels, PrintExpo prep, service pricing, SaaS ideas, knowledge, and follow-ups.
-          </p>
+          <h2>One real workflow. One strong evidence trail.</h2>
+          <p>Today&apos;s priority is to turn the printing quote-to-job workflow into a verified learning asset that compounds across career, startup, and education decisions.</p>
         </div>
         <div className="hero-metrics">
-          <Metric label="Hot local leads" value={hotLeads} />
+          <Metric label="Hot local leads" value={overview.hotLeads} />
           <Metric label="Tracked actions" value={data.actions.length} tone="pink" />
           <Metric label="Internship channels" value={internshipCount} tone="green" />
           <Metric label="Logged outcomes" value={outcomeCount} tone="violet" />
         </div>
+      </section>
+
+      <section className="panel full-panel command-grid">
+        <div className="command-action"><p className="eyebrow">Exact next action</p><h2>{exactNextAction}</h2><p>Ask an owner or estimator to reconstruct one completed anonymous job. Capture where information is re-entered, delayed, or lost.</p><Tag type="green">real-world validation</Tag></div>
+        <div className="command-status"><p className="eyebrow">Waiting for your action</p><div><strong>Track A</strong><span>Questions prepared; local validation not started.</span></div><div><strong>Track B</strong><span>Academic evidence folder and prerequisite map.</span></div><div><strong>Sales</strong><span>Paused until sender readiness is confirmed.</span></div></div>
+        <div className="command-status"><p className="eyebrow">Privacy and continuity</p><div><strong>Browser-local sales</strong><span>{backupLabel(overview.privateSales.meta)}</span></div><div><strong>Read today</strong><span>Printing and Packaging Manual</span></div><div><strong>Question Hela</strong><span>Which degree path compounds verified operating evidence?</span></div></div>
       </section>
 
       <section className="panel full-panel two-objectives">
@@ -390,15 +398,15 @@ function Overview({ data, query, status }) {
             <p>Private sales activity is browser-local. Export a backup after each session.</p>
           </div>
           <Metric label="Professional sender" value="Blocked" tone="pink" />
-          <Metric label="Fresh-5 status" value={`${freshFive.length}/5`} />
-          <Metric label="Selected best 3" value={`${selectedThree.length}/3`} tone="green" />
-          <Metric label="Drafts awaiting review" value={draftsAwaitingReview} tone="violet" />
-          <Metric label="Follow-ups due" value={followUpsDue} tone="pink" />
-          <Metric label="Replies waiting" value={repliesWaiting} tone="green" />
-          <Metric label="Last backup status" value={backupLabel(privateSales.meta)} tone="cyan" />
+          <Metric label="Fresh-5 status" value={`${overview.freshFive.length}/5`} />
+          <Metric label="Selected best 3" value={`${overview.selectedThree.length}/3`} tone="green" />
+          <Metric label="Drafts awaiting review" value={overview.draftsAwaitingReview} tone="violet" />
+          <Metric label="Follow-ups due" value={overview.followUpsDue} tone="pink" />
+          <Metric label="Replies waiting" value={overview.repliesWaiting} tone="green" />
+          <Metric label="Last backup status" value={backupLabel(overview.privateSales.meta)} tone="cyan" />
         </div>
         <div className="selected-strip">
-          {selectedThree.map((lead) => (
+          {overview.selectedThree.map((lead) => (
             <span key={lead.lead_id}>{lead.business_name}</span>
           ))}
         </div>
@@ -410,7 +418,7 @@ function Overview({ data, query, status }) {
           <Tag type="critical">manual only</Tag>
         </div>
         <div className="action-list">
-          {topActions.map((item) => (
+          {overview.topActions.map((item) => (
             <article className="action-row" key={`${item.priority}-${item.opportunity}`}>
               <span className="rank">{item.priority}</span>
               <div>
@@ -429,7 +437,7 @@ function Overview({ data, query, status }) {
           <span>Expected value focus</span>
         </div>
         <DataTable
-          rows={topActions.slice(0, 6)}
+          rows={overview.topActions.slice(0, 6)}
           columns={[
             { key: "channel", label: "Channel" },
             { key: "opportunity", label: "Opportunity" },
@@ -453,7 +461,7 @@ function Overview({ data, query, status }) {
             </div>
           ))}
         </div>
-        <p className="panel-note">Current service-market potential in standard packages: INR {serviceFloor.toLocaleString("en-IN")} across tracked offers.</p>
+        <p className="panel-note">Current service-market potential in standard packages: INR {overview.serviceFloor.toLocaleString("en-IN")} across tracked offers.</p>
       </section>
 
       <section className="panel">
@@ -917,12 +925,12 @@ function LearningMode({ meaning, verified, uncertain, question, action, notYet }
 function BusinessIntelligence({ data, query, status }) {
   const tabs = ["Overview", "Industry Manuals", "Workflow Maps", "Roles", "Pain Points", "Software Opportunities", "Interview Plan", "Real-World Lessons", "Pilot Ideas", "Experience Scoreboard"];
   const [tab, setTab] = useState("Overview");
-  const industries = applyFilters(data.businessIndustries, query, status);
+  const industries = useMemo(() => applyFilters(data.businessIndustries, query, status), [data.businessIndustries, query, status]);
   const active = data.businessIndustries[0];
-  const workflows = data.businessWorkflows.filter((row) => row.industry_id === active.industry_id);
+  const workflows = useMemo(() => data.businessWorkflows.filter((row) => row.industry_id === active.industry_id), [data.businessWorkflows, active.industry_id]);
   const renderIndustry = (industry) => <article className="research-card" key={industry.industry_id}><div className="section-title"><h3>{industry.industry_name}</h3><Tag type={industry.industry_id === "TA-IND-01" ? "green" : "neutral"}>{industry.industry_id === "TA-IND-01" ? "first active industry" : "desk research"}</Tag></div><p><strong>How it makes money / core workflow:</strong> {industry.general_pattern}</p><p><strong>Focus:</strong> {industry.priority_subsegment}. <strong>Customers:</strong> {industry.primary_customer_types}.</p><p><strong>What must be verified:</strong> {industry.key_hypothesis_to_verify}</p><p><strong>Next action:</strong> {industry.first_real_world_action}</p><details><summary>Open Full Manual</summary><p>Scope: {industry.scope}</p><p>Workflow: {industry.workflow_start} to {industry.workflow_end}</p><p>Evidence: {industry.research_status}. Last verified {industry.last_verified}.</p></details></article>;
   let content;
-  if (tab === "Overview") content = <><section className="metrics-grid">{[["Industries", industries.length], ["Workflow stages", data.businessWorkflows.length], ["Planned interviews", data.businessInterviews.length], ["Lessons", data.businessLessons.length], ["Pilot ideas", data.businessPilots.length]].map(([label, value]) => <Metric key={label} label={label} value={value} />)}</section><section className="research-card-grid">{industries.map(renderIndustry)}</section></>;
+  if (tab === "Overview") content = <><section className="metrics-grid">{[["Industries", industries.length], ["Workflow stages", data.businessWorkflows.length], ["Planned interviews", data.businessInterviews.length], ["Lessons", data.businessLessons.length], ["Pilot ideas", data.businessPilots.length]].map(([label, value]) => <Metric key={label} label={label} value={value} />)}</section><div className="chart-grid"><MiniBars title="Workflow stages by industry" rows={data.businessIndustries.map((industry) => ({ label: industry.industry_name, value: data.businessWorkflows.filter((row) => row.industry_id === industry.industry_id).length }))} note="Desk-research map" /><MiniBars title="Interview readiness" rows={[{ label: "Planned slots", value: data.businessInterviews.length }, { label: "Completed", value: data.businessInterviews.filter((row) => row.actual_date).length }]} note="No interviews claimed" /></div><section className="research-card-grid">{industries.map(renderIndustry)}</section></>;
   else if (tab === "Industry Manuals") content = <section className="research-card-grid">{industries.map(renderIndustry)}</section>;
   else if (tab === "Workflow Maps") content = <DataTable rows={workflows} columns={[{ key: "sequence", label: "#" }, { key: "stage", label: "Stage" }, { key: "primary_roles", label: "Roles" }, { key: "key_record", label: "Key record" }, { key: "common_exception", label: "Exception" }, { key: "validation_question", label: "Validate in reality" }]} />;
   else if (tab === "Roles") content = <DataTable rows={workflows} columns={[{ key: "stage", label: "Workflow stage" }, { key: "primary_roles", label: "Responsible roles" }, { key: "decision_or_control", label: "Decision/control" }, { key: "required_inputs", label: "Inputs" }]} />;
@@ -953,19 +961,24 @@ function valueAssessment(program) {
   return { inputs, score, label, difficult: elite ? "Potential peer, alumni, and location access may be difficult to reproduce independently; evidence needs direct verification." : "A verified international cohort, applied projects, and local employer access may be difficult to reproduce independently.", independent: "Core analytics, management theory, and technical foundations can be learned independently at far lower cost.", risk: highCost ? "Overpaying for brand or content without actively using access, projects, and alumni." : "Choosing lower tuition despite unclear prerequisite fit, network depth, or career access.", evidence: elite ? "Moderate evidence" : "Needs deeper verification" };
 }
 
-function ProgramCard({ program }) {
+function ProgramCard({ program, selected, onToggle }) {
   const value = valueAssessment(program);
-  return <article className="program-card"><div className="section-title"><div><h3>{program.university}</h3><p>{program.program} | {program.country}</p></div><Tag type={value.label === "Strong value" ? "green" : "medium"}>{value.label} {value.score}/100</Tag></div><div className="program-facts"><span><strong>Degree:</strong> {program.degree_family}</span><span><strong>Duration:</strong> {program.duration}</span><span><strong>Tuition:</strong> {program.current_tuition_snapshot}</span><span><strong>Work expectation:</strong> {program.work_experience}</span></div><p><strong>Why it fits:</strong> {program.why_fit_deepan}</p><p><strong>Why it may not:</strong> {program.main_gap_or_risk}</p><details><summary>Value for Money and Network Capital</summary><p className="provisional">Provisional planning assessment, not a university ranking. Unsupported access dimensions use a conservative baseline pending direct verification.</p><div className="score-grid">{Object.entries(value.inputs).map(([label, score]) => <span key={label}>{label}<strong>{score}/5</strong></span>)}</div><p><strong>What you are paying for:</strong> credentialed structure, cohort, feedback loops, local access, and career signalling where the program delivers them.</p><p><strong>Difficult to replicate:</strong> {value.difficult}</p><p><strong>Learn independently:</strong> {value.independent}</p><p><strong>Best-case value:</strong> active use of projects, mentors, peers, alumni, and location produces career and founder leverage.</p><p><strong>Realistic value:</strong> depends heavily on deliberate networking, participation, and prerequisite fit.</p><p><strong>Main overpayment risk:</strong> {value.risk}</p><p><strong>Network evidence:</strong> <Tag type={value.evidence === "Moderate evidence" ? "medium" : "watch"}>{value.evidence}</Tag></p></details><p className="source-link"><a href={program.official_program_url} target="_blank" rel="noreferrer">Official program source</a> <a href={program.official_admissions_or_fee_url} target="_blank" rel="noreferrer">Admissions / fee source</a> Verified {program.last_verified}</p></article>;
+  return <article className="program-card"><div className="section-title"><div><h3>{program.university}</h3><p>{program.program} | {program.country}</p></div><Tag type={value.label === "Strong value" ? "green" : "medium"}>{value.label} {value.score}/100</Tag></div><div className="program-facts"><span><strong>Degree:</strong> {program.degree_family}</span><span><strong>Duration:</strong> {program.duration}</span><span><strong>Tuition:</strong> {program.current_tuition_snapshot}</span><span><strong>Work expectation:</strong> {program.work_experience}</span></div><p><strong>Why it fits:</strong> {program.why_fit_deepan}</p><p><strong>Why it may not:</strong> {program.main_gap_or_risk}</p><button className={selected ? "compare-toggle selected" : "compare-toggle"} type="button" onClick={() => onToggle(program.rank)} aria-pressed={selected}>{selected ? "Selected for comparison" : "Compare program"}</button><details><summary>Value for Money and Network Capital</summary><p className="provisional">Provisional planning assessment, not a university ranking. Unsupported access dimensions use a conservative baseline pending direct verification.</p><div className="score-grid">{Object.entries(value.inputs).map(([label, score]) => <span key={label}>{label}<strong>{score}/5</strong></span>)}</div><p><strong>What you are paying for:</strong> credentialed structure, cohort, feedback loops, local access, and career signalling where the program delivers them.</p><p><strong>Difficult to replicate:</strong> {value.difficult}</p><p><strong>Learn independently:</strong> {value.independent}</p><p><strong>Best-case value:</strong> active use of projects, mentors, peers, alumni, and location produces career and founder leverage.</p><p><strong>Realistic value:</strong> depends heavily on deliberate networking, participation, and prerequisite fit.</p><p><strong>Main overpayment risk:</strong> {value.risk}</p><p><strong>Network evidence:</strong> <Tag type={value.evidence === "Moderate evidence" ? "medium" : "watch"}>{value.evidence}</Tag></p></details><p className="source-link"><a href={program.official_program_url} target="_blank" rel="noreferrer">Official program source</a> <a href={program.official_admissions_or_fee_url} target="_blank" rel="noreferrer">Admissions / fee source</a> Verified {program.last_verified}</p></article>;
 }
 
 function GlobalEducationStrategy({ data, query, status }) {
   const tabs = ["Degree Decision", "Country Comparison", "Program Shortlist", "Network Capital", "Scholarships", "Exams", "Profile Building", "Timeline", "Financial Scenarios", "Risks", "Global Education Scoreboard"];
   const [tab, setTab] = useState("Degree Decision");
-  const programs = applyFilters(data.mbaPrograms, query, status);
+  const [filters, setFilters] = useState({ country: "all", degree: "all", value: "all" });
+  const [comparison, setComparison] = useState([]);
+  const programs = useMemo(() => applyFilters(data.mbaPrograms, query, status).filter((program) => (filters.country === "all" || program.country === filters.country) && (filters.degree === "all" || program.degree_family === filters.degree) && (filters.value === "all" || valueAssessment(program).label === filters.value)), [data.mbaPrograms, query, status, filters]);
+  const toggleComparison = (rank) => setComparison((current) => current.includes(rank) ? current.filter((item) => item !== rank) : current.length < 3 ? [...current, rank] : current);
+  const selectedPrograms = programs.filter((program) => comparison.includes(program.rank));
+  const filterControls = <div className="program-filters"><label>Country<select value={filters.country} onChange={(event) => setFilters((current) => ({ ...current, country: event.target.value }))}><option value="all">All countries</option>{[...new Set(data.mbaPrograms.map((program) => program.country))].map((country) => <option key={country}>{country}</option>)}</select></label><label>Degree<select value={filters.degree} onChange={(event) => setFilters((current) => ({ ...current, degree: event.target.value }))}><option value="all">All degrees</option>{[...new Set(data.mbaPrograms.map((program) => program.degree_family))].map((degree) => <option key={degree}>{degree}</option>)}</select></label><label>Value<select value={filters.value} onChange={(event) => setFilters((current) => ({ ...current, value: event.target.value }))}><option value="all">All value categories</option>{["Strong value", "Conditional value", "Weak value", "Not worth the cost"].map((value) => <option key={value}>{value}</option>)}</select></label></div>;
   let content;
-  if (tab === "Degree Decision") content = <div className="decision-grid">{[["A. Study immediately after B.Sc.", "Strong only for an exceptional early-career pathway.", "Analytics, technology management, innovation, entrepreneurship, MiM", "Admissions and scholarship fit depend on academic evidence; leadership credibility is still developing."], ["B. Work/build for 2-3 years, then study", "Best balance for a stronger specialist master's application.", "Business analytics, tech-business, innovation", "Creates measurable impact, leadership, and clearer founder direction; waiting has an opportunity cost."], ["C. Build/work for 3-5 years, then apply for MBA", "Best conventional MBA timing in the current plan.", "MBA / executive network routes", "Stronger leadership credibility and cohort contribution; do not wait passively."]].map(([title, verdict, degrees, risk]) => <article key={title}><h3>{title}</h3><p>{verdict}</p><p><strong>Best degree types:</strong> {degrees}</p><p><strong>Leverage / risk:</strong> {risk}</p></article>)}</div>;
+  if (tab === "Degree Decision") content = <><div className="decision-grid">{[["A. Study immediately after B.Sc.", "Strong only for an exceptional early-career pathway.", "Analytics, technology management, innovation, entrepreneurship, MiM", "Admissions and scholarship fit depend on academic evidence; leadership credibility is still developing."], ["B. Work/build for 2-3 years, then study", "Best balance for a stronger specialist master's application.", "Business analytics, tech-business, innovation", "Creates measurable impact, leadership, and clearer founder direction; waiting has an opportunity cost."], ["C. Build/work for 3-5 years, then apply for MBA", "Best conventional MBA timing in the current plan.", "MBA / executive network routes", "Stronger leadership credibility and cohort contribution; do not wait passively."]].map(([title, verdict, degrees, risk]) => <article key={title}><h3>{title}</h3><p>{verdict}</p><p><strong>Best degree types:</strong> {degrees}</p><p><strong>Leverage / risk:</strong> {risk}</p></article>)}</div><div className="chart-grid"><MiniBars title="Programs by country" rows={Object.entries(data.mbaPrograms.reduce((totals, program) => ({ ...totals, [program.country]: (totals[program.country] || 0) + 1 }), {})).map(([label, value]) => ({ label, value }))} note="Shortlist coverage" /><MiniBars title="Programs by degree family" rows={Object.entries(data.mbaPrograms.reduce((totals, program) => ({ ...totals, [program.degree_family]: (totals[program.degree_family] || 0) + 1 }), {})).map(([label, value]) => ({ label, value }))} note="Not an admission forecast" /></div></>;
   else if (tab === "Country Comparison") content = <DataTable rows={data.mbaCountries} columns={[{ key: "country", label: "Country" }, { key: "best_fresh_grad_path", label: "Early-career route" }, { key: "tech_business_job_market", label: "Career / technology" }, { key: "startup_ecosystem", label: "Ecosystem" }, { key: "major_risks", label: "Risk" }, { key: "recommendation", label: "Recommendation" }]} />;
-  else if (tab === "Program Shortlist") content = <div className="program-groups">{["Elite network / high reach", "Strong target", "Strategic fit", "Backup or lower-priority"].map((group) => <section key={group}><h3>{group}</h3>{programs.filter((program) => programGroup(program.category) === group).map((program) => <ProgramCard key={`${program.rank}-${program.university}`} program={program} />)}</section>)}</div>;
+  else if (tab === "Program Shortlist") content = <><div className="section-title"><h3>Compare up to three programs</h3><span>{comparison.length}/3 selected</span></div>{filterControls}{selectedPrograms.length > 0 && <DataTable rows={selectedPrograms} columns={[{ key: "university", label: "University" }, { key: "country", label: "Country" }, { key: "degree_family", label: "Degree" }, { key: "duration", label: "Duration" }, { key: "current_tuition_snapshot", label: "Tuition" }, { key: "main_gap_or_risk", label: "Main risk" }]} />}{programs.length ? <div className="program-groups">{["Elite network / high reach", "Strong target", "Strategic fit", "Backup or lower-priority"].map((group) => <section key={group}><h3>{group}</h3>{programs.filter((program) => programGroup(program.category) === group).map((program) => <ProgramCard key={`${program.rank}-${program.university}`} program={program} selected={comparison.includes(program.rank)} onToggle={toggleComparison} />)}</section>)}</div> : <div className="empty-state">No programs match these filters. Clear one filter to continue comparing.</div>}</>;
   else if (tab === "Network Capital") content = <div className="program-groups">{programs.map((program) => { const value = valueAssessment(program); return <article className="network-card" key={program.rank}><div className="section-title"><h3>{program.university}</h3><Tag type={value.evidence === "Moderate evidence" ? "medium" : "watch"}>{value.evidence}</Tag></div><p><strong>Potential network capital:</strong> peer and alumni reach, founder/investor access, technology ecosystem, corporate access, location advantage, mobility, diversity, and practical exposure must be verified directly.</p><p><strong>Could give Deepan:</strong> structured access points and a credible reason to request feedback, projects, and conversations.</p><p><strong>Cannot guarantee:</strong> mentors, investors, internships, jobs, warm introductions, or founder outcomes.</p><p><strong>Deepan must contribute:</strong> active participation, well-prepared outreach, useful work, follow-through, and evidence of impact.</p></article>; })}</div>;
   else if (tab === "Scholarships") content = <DataTable rows={data.mbaScholarships} columns={[{ key: "opportunity", label: "Scholarship" }, { key: "country_or_scope", label: "Scope" }, { key: "funding_snapshot", label: "Funding" }, { key: "key_eligibility_or_constraint", label: "Constraint" }, { key: "deadline_status", label: "Deadline" }, { key: "official_url", label: "Official source", render: (row) => <a href={row.official_url} target="_blank" rel="noreferrer">Source</a> }]} />;
   else if (tab === "Exams") content = <DataTable rows={data.mbaExams} columns={[{ key: "exam", label: "Exam" }, { key: "decision", label: "Decision" }, { key: "recommended_timing", label: "Timing" }, { key: "first_action", label: "First action" }, { key: "official_source_url", label: "Official source", render: (row) => <a href={row.official_source_url} target="_blank" rel="noreferrer">Source</a> }]} />;
@@ -1256,10 +1269,11 @@ function App() {
   const [activePage, setActivePage] = useState("Overview");
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("all");
+  const deferredQuery = useDeferredValue(query);
 
   const content = useMemo(() => {
     if (!data) return null;
-    const props = { data, query, status };
+    const props = { data, query: deferredQuery, status };
     if (activePage === "Overview") return <Overview {...props} />;
     if (activePage === "Leads") return <Leads {...props} />;
     if (activePage === "Internships") return <Internships {...props} />;
@@ -1273,10 +1287,10 @@ function App() {
     if (activePage === "Global Education Strategy") return <GlobalEducationStrategy {...props} />;
     if (activePage === "Sales") return <Sales {...props} />;
     return <WeeklyPlan {...props} />;
-  }, [activePage, data, query, status]);
+  }, [activePage, data, deferredQuery, status]);
 
   if (error) {
-    return <div className="loading">Data load failed: {error}</div>;
+    return <div className="loading"><div><strong>Dashboard data could not load.</strong><p>{error}</p><button type="button" onClick={() => window.location.reload()}>Retry loading</button></div></div>;
   }
 
   if (!data) {
