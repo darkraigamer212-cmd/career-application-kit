@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./dashboard.css";
 
 const portfolioUrl = "./index.html";
-const dataVersion = "20260711-sales-safety";
+const dataVersion = "20260712-two-track-research";
 const salesStorageKey = "dragon-os-sales-private-v2";
 
 const files = {
@@ -19,7 +19,20 @@ const files = {
   outcomes: "./data/outcome_log.csv",
   salesLeads: "./data/sales_leads.csv",
   salesBriefs: "./data/sales_company_briefs.csv",
-  salesIndustryKnowledge: "./data/sales_industry_knowledge.md"
+  salesIndustryKnowledge: "./data/sales_industry_knowledge.md",
+  businessIndustries: "./data/two_track_research/business_industries.csv",
+  businessWorkflows: "./data/two_track_research/business_workflow_manuals.csv",
+  businessInterviews: "./data/two_track_research/business_interviews.csv",
+  businessLessons: "./data/two_track_research/business_lessons.csv",
+  businessPilots: "./data/two_track_research/business_pilot_ideas.csv",
+  businessScoreboard: "./data/two_track_research/business_experience_scoreboard.csv",
+  mbaCountries: "./data/two_track_research/mba_country_comparison.csv",
+  mbaPrograms: "./data/two_track_research/mba_program_shortlist.csv",
+  mbaScholarships: "./data/two_track_research/mba_scholarships.csv",
+  mbaExams: "./data/two_track_research/mba_exam_plan.csv",
+  mbaProfile: "./data/two_track_research/mba_profile_roadmap.csv",
+  mbaFinance: "./data/two_track_research/mba_financial_scenarios.csv",
+  mbaTimeline: "./data/two_track_research/mba_application_timeline.csv"
 };
 
 const pages = [
@@ -32,6 +45,8 @@ const pages = [
   "Services",
   "SaaS Ideas",
   "Outcomes",
+  "Business Intelligence",
+  "Global Education Strategy",
   "Sales",
   "Weekly Plan"
 ];
@@ -333,6 +348,33 @@ function Overview({ data, query, status }) {
           <Metric label="Tracked actions" value={data.actions.length} tone="pink" />
           <Metric label="Internship channels" value={internshipCount} tone="green" />
           <Metric label="Logged outcomes" value={outcomeCount} tone="violet" />
+        </div>
+      </section>
+
+      <section className="panel full-panel two-objectives">
+        <div className="section-title"><h2>Two Main Objectives</h2><Tag type="green">research-to-evidence</Tag></div>
+        <div className="objective-grid">
+          <article>
+            <p className="eyebrow">Track A - Business Experience</p>
+            <h3>Printing and packaging: quote-to-job handoff</h3>
+            <div className="metric-row"><Metric label="Industries" value={data.businessIndustries.length} /><Metric label="Workflow stages" value={data.businessWorkflows.length} tone="green" /><Metric label="Interview slots" value={data.businessInterviews.length} tone="violet" /><Metric label="Lessons / pilots" value={`${data.businessLessons.length} / ${data.businessPilots.length}`} tone="pink" /></div>
+            <p><strong>Next real-world action:</strong> reconstruct one completed job with an owner or estimator. <strong>Blocker:</strong> no local validation yet.</p>
+            <p className="action-callout">Today: read the printing manual and prepare the ten discovery questions; do not build or pitch.</p>
+          </article>
+          <article>
+            <p className="eyebrow">Track B - Global Education</p>
+            <h3>Build evidence first; choose the degree path deliberately.</h3>
+            <div className="metric-row"><Metric label="Countries" value={data.mbaCountries.length} /><Metric label="Programs" value={data.mbaPrograms.length} tone="green" /><Metric label="Scholarships" value={data.mbaScholarships.length} tone="violet" /></div>
+            <p><strong>Recommendation:</strong> early-career analytics, technology-management, innovation, or entrepreneurship programs after graduation; conventional MBA after 3-5 years of meaningful work. <strong>Uncertainty:</strong> 2028 entry requirements.</p>
+            <p className="action-callout">Today: collect transcripts, syllabus, and grading-scale evidence; map quantitative prerequisites.</p>
+          </article>
+        </div>
+        <div className="decision-strip">
+          <span><strong>Combined priority</strong> Turn one printing workflow into measurable, application-ready evidence.</span>
+          <span><strong>Read today</strong> Printing and Packaging Manual</span>
+          <span><strong>Question Hela</strong> Which degree family best compounds verified operating experience?</span>
+          <span><strong>Real-world action</strong> Validate one anonymous quote-to-job case.</span>
+          <span className="warning"><strong>Do not build yet</strong> No prototype until a real workflow, role, baseline, consent, and stop rule are confirmed.</span>
         </div>
       </section>
 
@@ -864,6 +906,77 @@ function dateIsDue(value) {
   return !Number.isNaN(date.getTime()) && date <= new Date();
 }
 
+function ResearchTabs({ tabs, active, onChange }) {
+  return <div className="research-tabs" role="tablist">{tabs.map((tab) => <button type="button" role="tab" aria-selected={active === tab} className={active === tab ? "active" : ""} key={tab} onClick={() => onChange(tab)}>{tab}</button>)}</div>;
+}
+
+function LearningMode({ meaning, verified, uncertain, question, action, notYet }) {
+  return <details className="learning-mode"><summary>Learning mode</summary><div className="learning-grid"><span><strong>What this means</strong>{meaning}</span><span><strong>What is verified</strong>{verified}</span><span><strong>What is uncertain</strong>{uncertain}</span><span><strong>Ask Hela</strong>{question}</span><span><strong>Real-world validation</strong>{action}</span><span><strong>Not yet</strong>{notYet}</span></div></details>;
+}
+
+function BusinessIntelligence({ data, query, status }) {
+  const tabs = ["Overview", "Industry Manuals", "Workflow Maps", "Roles", "Pain Points", "Software Opportunities", "Interview Plan", "Real-World Lessons", "Pilot Ideas", "Experience Scoreboard"];
+  const [tab, setTab] = useState("Overview");
+  const industries = applyFilters(data.businessIndustries, query, status);
+  const active = data.businessIndustries[0];
+  const workflows = data.businessWorkflows.filter((row) => row.industry_id === active.industry_id);
+  const renderIndustry = (industry) => <article className="research-card" key={industry.industry_id}><div className="section-title"><h3>{industry.industry_name}</h3><Tag type={industry.industry_id === "TA-IND-01" ? "green" : "neutral"}>{industry.industry_id === "TA-IND-01" ? "first active industry" : "desk research"}</Tag></div><p><strong>How it makes money / core workflow:</strong> {industry.general_pattern}</p><p><strong>Focus:</strong> {industry.priority_subsegment}. <strong>Customers:</strong> {industry.primary_customer_types}.</p><p><strong>What must be verified:</strong> {industry.key_hypothesis_to_verify}</p><p><strong>Next action:</strong> {industry.first_real_world_action}</p><details><summary>Open Full Manual</summary><p>Scope: {industry.scope}</p><p>Workflow: {industry.workflow_start} to {industry.workflow_end}</p><p>Evidence: {industry.research_status}. Last verified {industry.last_verified}.</p></details></article>;
+  let content;
+  if (tab === "Overview") content = <><section className="metrics-grid">{[["Industries", industries.length], ["Workflow stages", data.businessWorkflows.length], ["Planned interviews", data.businessInterviews.length], ["Lessons", data.businessLessons.length], ["Pilot ideas", data.businessPilots.length]].map(([label, value]) => <Metric key={label} label={label} value={value} />)}</section><section className="research-card-grid">{industries.map(renderIndustry)}</section></>;
+  else if (tab === "Industry Manuals") content = <section className="research-card-grid">{industries.map(renderIndustry)}</section>;
+  else if (tab === "Workflow Maps") content = <DataTable rows={workflows} columns={[{ key: "sequence", label: "#" }, { key: "stage", label: "Stage" }, { key: "primary_roles", label: "Roles" }, { key: "key_record", label: "Key record" }, { key: "common_exception", label: "Exception" }, { key: "validation_question", label: "Validate in reality" }]} />;
+  else if (tab === "Roles") content = <DataTable rows={workflows} columns={[{ key: "stage", label: "Workflow stage" }, { key: "primary_roles", label: "Responsible roles" }, { key: "decision_or_control", label: "Decision/control" }, { key: "required_inputs", label: "Inputs" }]} />;
+  else if (tab === "Pain Points") content = <DataTable rows={workflows} columns={[{ key: "stage", label: "Stage" }, { key: "common_exception", label: "Pain / exception" }, { key: "metric_candidate", label: "Measure" }, { key: "validation_question", label: "Reality check" }]} />;
+  else if (tab === "Software Opportunities") content = <DataTable rows={data.businessPilots} columns={[{ key: "pilot_name", label: "Opportunity" }, { key: "problem_hypothesis", label: "Hypothesis" }, { key: "minimum_scope", label: "Smallest useful scope" }, { key: "explicit_exclusions", label: "Do not automate" }, { key: "stop_rule", label: "Stop rule" }]} />;
+  else if (tab === "Interview Plan") content = <DataTable rows={data.businessInterviews} columns={[{ key: "planned_month", label: "Planned" }, { key: "target_role", label: "Role" }, { key: "research_objective", label: "Objective" }, { key: "status", label: "Status", render: (row) => <Tag type="medium">{row.status}</Tag> }, { key: "next_validation_step", label: "Next validation" }]} />;
+  else if (tab === "Real-World Lessons") content = <DataTable rows={data.businessLessons} columns={[{ key: "current_lesson", label: "Lesson" }, { key: "original_assumption", label: "Original assumption" }, { key: "decision_effect", label: "Decision effect" }, { key: "needs_real_world_validation", label: "Validate?" }]} />;
+  else if (tab === "Pilot Ideas") content = <DataTable rows={data.businessPilots} columns={[{ key: "pilot_name", label: "Pilot" }, { key: "target_user", label: "User" }, { key: "success_signal", label: "Success signal" }, { key: "privacy_risk", label: "Privacy risk" }, { key: "next_action", label: "Next action" }]} />;
+  else content = <DataTable rows={data.businessScoreboard} columns={[{ key: "period", label: "Period" }, { key: "industry_focus", label: "Focus" }, { key: "conversation_target", label: "Conversation target" }, { key: "workflow_case_target", label: "Cases" }, { key: "current_score", label: "Current score" }, { key: "evidence_state", label: "Evidence" }]} />;
+  return <div className="research-page"><section className="panel research-head"><div><p className="eyebrow">Track A</p><h2>Business Intelligence</h2><p>Start with printing and packaging. Research patterns are not local facts until a real workflow corrects them.</p></div><Tag type="green">first active: quote-to-job</Tag></section><ResearchTabs tabs={tabs} active={tab} onChange={setTab} /><section className="panel full-panel">{content}</section><LearningMode meaning="Use operating research to create evidence, not a premature product." verified="Five industry manuals and 40 desk-research workflow stages are prepared." uncertain="All local workflow assumptions and pain levels." question="Which evidence would make this experience strongest for an early-career application?" action="Reconstruct one completed anonymous printing job with an owner or estimator." notYet="Do not automate pricing, worker surveillance, compliance, or confidential data." /></div>;
+}
+
+function programGroup(category) {
+  return { Dream: "Elite network / high reach", "Strong target": "Strong target", "Realistic target": "Strategic fit", "Financially safe backup": "Backup or lower-priority" }[category] || category;
+}
+
+function valueAssessment(program) {
+  const tuition = String(program.current_tuition_snapshot || "").toLowerCase();
+  const duration = numberFrom(program.duration);
+  const degree = String(program.degree_family || "").toLowerCase();
+  const highCost = /usd|gbp|eur 7[0-9]|eur 6[0-9]/.test(tuition);
+  const lowCost = /no general tuition|no tuition|eur 4,000|eur 1,500/.test(tuition);
+  const elite = program.category === "Dream";
+  const aligned = degree.includes("analytics") || degree.includes("tech/business") || degree.includes("innovation");
+  const inputs = { "Learning depth": aligned ? 4 : 3, "Practical exposure": 2, "Faculty access": 2, "Peer quality": elite ? 4 : 3, "Alumni usefulness": elite ? 4 : 3, "Founder/investor access": 2, "Technology ecosystem": ["US", "UK", "Singapore", "Germany"].some((country) => program.country.includes(country)) ? 4 : 3, "International mobility": 3, "Career opportunity": 3, "Total cost": lowCost ? 5 : highCost ? 1 : 3, "Program duration": duration && duration <= 14 ? 4 : duration <= 18 ? 3 : 2, "Opportunity cost": duration && duration <= 14 ? 4 : 2 };
+  const score = Math.round(Object.values(inputs).reduce((sum, value) => sum + value, 0) / Object.keys(inputs).length * 20);
+  const label = score >= 76 ? "Strong value" : score >= 62 ? "Conditional value" : score >= 48 ? "Weak value" : "Not worth the cost";
+  return { inputs, score, label, difficult: elite ? "Potential peer, alumni, and location access may be difficult to reproduce independently; evidence needs direct verification." : "A verified international cohort, applied projects, and local employer access may be difficult to reproduce independently.", independent: "Core analytics, management theory, and technical foundations can be learned independently at far lower cost.", risk: highCost ? "Overpaying for brand or content without actively using access, projects, and alumni." : "Choosing lower tuition despite unclear prerequisite fit, network depth, or career access.", evidence: elite ? "Moderate evidence" : "Needs deeper verification" };
+}
+
+function ProgramCard({ program }) {
+  const value = valueAssessment(program);
+  return <article className="program-card"><div className="section-title"><div><h3>{program.university}</h3><p>{program.program} | {program.country}</p></div><Tag type={value.label === "Strong value" ? "green" : "medium"}>{value.label} {value.score}/100</Tag></div><div className="program-facts"><span><strong>Degree:</strong> {program.degree_family}</span><span><strong>Duration:</strong> {program.duration}</span><span><strong>Tuition:</strong> {program.current_tuition_snapshot}</span><span><strong>Work expectation:</strong> {program.work_experience}</span></div><p><strong>Why it fits:</strong> {program.why_fit_deepan}</p><p><strong>Why it may not:</strong> {program.main_gap_or_risk}</p><details><summary>Value for Money and Network Capital</summary><p className="provisional">Provisional planning assessment, not a university ranking. Unsupported access dimensions use a conservative baseline pending direct verification.</p><div className="score-grid">{Object.entries(value.inputs).map(([label, score]) => <span key={label}>{label}<strong>{score}/5</strong></span>)}</div><p><strong>What you are paying for:</strong> credentialed structure, cohort, feedback loops, local access, and career signalling where the program delivers them.</p><p><strong>Difficult to replicate:</strong> {value.difficult}</p><p><strong>Learn independently:</strong> {value.independent}</p><p><strong>Best-case value:</strong> active use of projects, mentors, peers, alumni, and location produces career and founder leverage.</p><p><strong>Realistic value:</strong> depends heavily on deliberate networking, participation, and prerequisite fit.</p><p><strong>Main overpayment risk:</strong> {value.risk}</p><p><strong>Network evidence:</strong> <Tag type={value.evidence === "Moderate evidence" ? "medium" : "watch"}>{value.evidence}</Tag></p></details><p className="source-link"><a href={program.official_program_url} target="_blank" rel="noreferrer">Official program source</a> <a href={program.official_admissions_or_fee_url} target="_blank" rel="noreferrer">Admissions / fee source</a> Verified {program.last_verified}</p></article>;
+}
+
+function GlobalEducationStrategy({ data, query, status }) {
+  const tabs = ["Degree Decision", "Country Comparison", "Program Shortlist", "Network Capital", "Scholarships", "Exams", "Profile Building", "Timeline", "Financial Scenarios", "Risks", "Global Education Scoreboard"];
+  const [tab, setTab] = useState("Degree Decision");
+  const programs = applyFilters(data.mbaPrograms, query, status);
+  let content;
+  if (tab === "Degree Decision") content = <div className="decision-grid">{[["A. Study immediately after B.Sc.", "Strong only for an exceptional early-career pathway.", "Analytics, technology management, innovation, entrepreneurship, MiM", "Admissions and scholarship fit depend on academic evidence; leadership credibility is still developing."], ["B. Work/build for 2-3 years, then study", "Best balance for a stronger specialist master's application.", "Business analytics, tech-business, innovation", "Creates measurable impact, leadership, and clearer founder direction; waiting has an opportunity cost."], ["C. Build/work for 3-5 years, then apply for MBA", "Best conventional MBA timing in the current plan.", "MBA / executive network routes", "Stronger leadership credibility and cohort contribution; do not wait passively."]].map(([title, verdict, degrees, risk]) => <article key={title}><h3>{title}</h3><p>{verdict}</p><p><strong>Best degree types:</strong> {degrees}</p><p><strong>Leverage / risk:</strong> {risk}</p></article>)}</div>;
+  else if (tab === "Country Comparison") content = <DataTable rows={data.mbaCountries} columns={[{ key: "country", label: "Country" }, { key: "best_fresh_grad_path", label: "Early-career route" }, { key: "tech_business_job_market", label: "Career / technology" }, { key: "startup_ecosystem", label: "Ecosystem" }, { key: "major_risks", label: "Risk" }, { key: "recommendation", label: "Recommendation" }]} />;
+  else if (tab === "Program Shortlist") content = <div className="program-groups">{["Elite network / high reach", "Strong target", "Strategic fit", "Backup or lower-priority"].map((group) => <section key={group}><h3>{group}</h3>{programs.filter((program) => programGroup(program.category) === group).map((program) => <ProgramCard key={`${program.rank}-${program.university}`} program={program} />)}</section>)}</div>;
+  else if (tab === "Network Capital") content = <div className="program-groups">{programs.map((program) => { const value = valueAssessment(program); return <article className="network-card" key={program.rank}><div className="section-title"><h3>{program.university}</h3><Tag type={value.evidence === "Moderate evidence" ? "medium" : "watch"}>{value.evidence}</Tag></div><p><strong>Potential network capital:</strong> peer and alumni reach, founder/investor access, technology ecosystem, corporate access, location advantage, mobility, diversity, and practical exposure must be verified directly.</p><p><strong>Could give Deepan:</strong> structured access points and a credible reason to request feedback, projects, and conversations.</p><p><strong>Cannot guarantee:</strong> mentors, investors, internships, jobs, warm introductions, or founder outcomes.</p><p><strong>Deepan must contribute:</strong> active participation, well-prepared outreach, useful work, follow-through, and evidence of impact.</p></article>; })}</div>;
+  else if (tab === "Scholarships") content = <DataTable rows={data.mbaScholarships} columns={[{ key: "opportunity", label: "Scholarship" }, { key: "country_or_scope", label: "Scope" }, { key: "funding_snapshot", label: "Funding" }, { key: "key_eligibility_or_constraint", label: "Constraint" }, { key: "deadline_status", label: "Deadline" }, { key: "official_url", label: "Official source", render: (row) => <a href={row.official_url} target="_blank" rel="noreferrer">Source</a> }]} />;
+  else if (tab === "Exams") content = <DataTable rows={data.mbaExams} columns={[{ key: "exam", label: "Exam" }, { key: "decision", label: "Decision" }, { key: "recommended_timing", label: "Timing" }, { key: "first_action", label: "First action" }, { key: "official_source_url", label: "Official source", render: (row) => <a href={row.official_source_url} target="_blank" rel="noreferrer">Source</a> }]} />;
+  else if (tab === "Profile Building") content = <DataTable rows={data.mbaProfile} columns={[{ key: "period", label: "Period" }, { key: "priority", label: "Priority" }, { key: "action", label: "Action" }, { key: "deliverable", label: "Evidence" }, { key: "track_a_link", label: "Track A link" }]} />;
+  else if (tab === "Timeline") content = <DataTable rows={data.mbaTimeline} columns={[{ key: "window", label: "Window" }, { key: "stage", label: "Stage" }, { key: "required_actions", label: "Required actions" }, { key: "decision_gate", label: "Decision gate" }, { key: "official_fact_to_reverify", label: "Reverify" }]} />;
+  else if (tab === "Financial Scenarios") content = <DataTable rows={data.mbaFinance} columns={[{ key: "scenario", label: "Scenario" }, { key: "example_route", label: "Route" }, { key: "total_planning_band", label: "Planning band" }, { key: "scholarship_assumption", label: "Scholarship" }, { key: "decision_rule", label: "Decision rule" }]} />;
+  else if (tab === "Risks") content = <DataTable rows={programs} columns={[{ key: "university", label: "Program" }, { key: "main_gap_or_risk", label: "Main risk" }, { key: "deadline_status_for_deepan_intake", label: "Timing" }, { key: "unstable_fact_flag", label: "Reverify?" }]} />;
+  else content = <section className="metrics-grid">{[["Countries researched", data.mbaCountries.length], ["Programs researched", data.mbaPrograms.length], ["Scholarships", data.mbaScholarships.length], ["Profile actions", data.mbaProfile.length], ["Current recommendation", "Specialist master first"]].map(([label, value]) => <Metric key={label} label={label} value={value} />)}</section>;
+  return <div className="research-page"><section className="panel research-head"><div><p className="eyebrow">Track B</p><h2>Global Education Strategy</h2><p>Do not rush into a conventional MBA immediately after graduation unless a truly exceptional early-career pathway is available.</p></div><Tag type="medium">2028 facts must be reverified</Tag></section><ResearchTabs tabs={tabs} active={tab} onChange={setTab} /><section className="panel full-panel">{content}</section><LearningMode meaning="A degree is an access-and-leverage decision, not a tuition comparison." verified="Twenty program snapshots and official-source links were captured on 2026-07-12." uncertain="Future fees, deadlines, curriculum delivery, access quality, visas, and 2028 eligibility." question="Which program offers genuinely non-replicable access for my current evidence and intended path?" action="Build an academic prerequisite matrix and verify each shortlisted program directly." notYet="Do not treat prestige, scholarships, or an immediate MBA as a complete decision." /></div>;
+}
+
 function csvEscape(value) {
   const text = String(value ?? "");
   return /[",\n]/.test(text) ? `"${text.replaceAll('"', '""')}"` : text;
@@ -1156,6 +1269,8 @@ function App() {
     if (activePage === "Services") return <Services {...props} />;
     if (activePage === "SaaS Ideas") return <SaasIdeas {...props} />;
     if (activePage === "Outcomes") return <Outcomes {...props} />;
+    if (activePage === "Business Intelligence") return <BusinessIntelligence {...props} />;
+    if (activePage === "Global Education Strategy") return <GlobalEducationStrategy {...props} />;
     if (activePage === "Sales") return <Sales {...props} />;
     return <WeeklyPlan {...props} />;
   }, [activePage, data, query, status]);
