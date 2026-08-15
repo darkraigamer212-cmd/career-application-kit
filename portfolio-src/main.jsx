@@ -15,7 +15,8 @@ const links = {
   calculator: "https://calculator00.pages.dev/",
   erp: "https://lakshmipriya-erp.vercel.app/home",
   samplePdf: "../output/pdf/sample_rental_research_pack.pdf",
-  caseStudy: "../docs/project_case_study_rental_research.md"
+  caseStudy: "../docs/project_case_study_rental_research.md",
+  certificateArchive: "./assets/certificates/Deepan_K_Certificates_Combined.pdf"
 };
 
 const screenshots = {
@@ -151,8 +152,32 @@ const secondaryLinks = [
 
 const skillGroups = [
   { title: "Strong", items: ["React", "JavaScript", "Python", "HTML", "CSS", "Git", "GitHub", "Supabase", "Dashboards", "Automation", "ERP workflows"] },
-  { title: "Working knowledge", items: ["Django basics", "PDF/DOCX generation", "Testing", "CLI tools", "REST API basics", "PostgreSQL basics", "Technical documentation"] },
-  { title: "Currently learning", items: ["TypeScript basics", "Docker basics", "CI/CD basics", "GitHub Actions", "GSAP basics", "Framer Motion basics"] }
+  { title: "Working knowledge", items: ["Data structures", "PDF/DOCX generation", "Testing", "CLI tools", "REST API basics", "PostgreSQL basics", "Technical documentation", "Cloud fundamentals"] },
+  { title: "Currently learning", items: ["TypeScript basics", "Docker basics", "CI/CD basics", "GitHub Actions", "GSAP basics", "Framer Motion basics", "Machine learning foundations"] }
+];
+
+const credentialGroups = [
+  {
+    title: "AI and machine learning",
+    summary: "23 completed courses total; applied as foundations for thoughtful, verifiable software work.",
+    courses: ["Machine Learning Specialization", "Neural Networks and Deep Learning", "Convolutional Neural Networks", "Natural Language Processing with Attention Models", "Build Basic GANs", "Generative AI for Everyone", "Generative AI with Large Language Models", "Introduction to Generative AI", "AI for Everyone"]
+  },
+  {
+    title: "Cloud and security",
+    summary: "Fundamentals for cloud-aware, security-conscious business software and technical communication.",
+    courses: ["Microsoft Azure Fundamentals (AZ-900) Cert Prep", "Google Cloud Digital Leader Certification Prep", "AWS Cloud Practitioner Essentials", "Introduction to Cloud Computing", "Introduction to Cybersecurity Essentials"]
+  },
+  {
+    title: "Software, data, and business",
+    summary: "Core programming, data, front-end, economics, and decentralized-finance study that supports practical project work.",
+    courses: ["Introduction to Front-End Development", "Hello, Python!", "Data Structures in C", "Programming with C", "Data Analysis with Python", "Generative AI and LLMs: Architecture and Data Preparation", "Microeconomics Principles", "Decentralized Finance (DeFi): The Future of Finance"]
+  }
+];
+
+const appliedLearning = [
+  { area: "Automation and data workflows", body: "Python, data analysis, data structures, and cloud foundations inform the report-generation workflow.", project: "Rental Research Report Generator", href: links.caseStudy },
+  { area: "Business-facing web software", body: "Front-end development, cloud fundamentals, security awareness, and economics support operational thinking.", project: "Printing Press ERP", href: links.erp },
+  { area: "AI-assisted, verifiable delivery", body: "Generative AI and machine-learning coursework strengthens how I evaluate, document, and verify practical AI-assisted workflows.", project: "Career Application Kit", href: links.github }
 ];
 
 const timeline = [
@@ -224,6 +249,7 @@ function PortfolioPage() {
       <Projects />
       <ProofGallery />
       <SkillMatrix />
+      <Credentials />
       <Timeline />
       <LinkHub />
     </main>
@@ -428,6 +454,47 @@ function SkillMatrix() {
           </motion.article>
         ))}
       </div>
+    </section>
+  );
+}
+
+function Credentials() {
+  return (
+    <section id="credentials" className="section-shell credentials-section">
+      <motion.div className="section-heading" {...fadeUp}>
+        <p className="section-label">Credentials and applied learning</p>
+        <h2>Course foundations, connected to real work.</h2>
+        <p>These are completed course credentials, not substitutes for experience. They show the foundations I use to build, document, and review practical software projects.</p>
+      </motion.div>
+      <div className="credential-rail">
+        {credentialGroups.map((group) => (
+          <motion.article className="credential-group" key={group.title} {...fadeUp}>
+            <h3>{group.title}</h3>
+            <p>{group.summary}</p>
+            <ul>{group.courses.map((course) => <li key={course}>{course}</li>)}</ul>
+          </motion.article>
+        ))}
+      </div>
+      <motion.a className="certificate-archive" href={links.certificateArchive} target="_blank" rel="noreferrer" {...fadeUp}>
+        <span>Certificate archive</span>
+        <strong>Open all 23 course certificates</strong>
+        <span aria-hidden="true">→</span>
+      </motion.a>
+      <motion.div className="applied-learning" {...fadeUp}>
+        <div>
+          <p className="section-label">Applied learning</p>
+          <h3>Learning only matters when it improves the work.</h3>
+        </div>
+        <div className="applied-learning-grid">
+          {appliedLearning.map((item) => (
+            <article key={item.area}>
+              <h4>{item.area}</h4>
+              <p>{item.body}</p>
+              <a href={item.href} target={item.href.startsWith("http") ? "_blank" : undefined} rel={item.href.startsWith("http") ? "noreferrer" : undefined}>View {item.project} →</a>
+            </article>
+          ))}
+        </div>
+      </motion.div>
     </section>
   );
 }

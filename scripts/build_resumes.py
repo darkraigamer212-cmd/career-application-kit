@@ -84,9 +84,17 @@ ATS = {
         (
             "Skills",
             [
-                "Languages: Python, JavaScript, HTML, CSS, TypeScript basics",
-                "Frontend and data: React, Vite, Supabase, ReportLab, python-docx, Django basics",
-                "Tools and areas: Git, GitHub, GitHub Actions, VS Code, CLI tools, AI-assisted development with manual verification, REST API basics, PostgreSQL basics, ERP workflows, dashboards, testing, documentation, Docker basics, GSAP basics, Framer Motion basics",
+                "Languages: Python, JavaScript, HTML, CSS, C, TypeScript basics",
+                "Frontend and data: React, Vite, Supabase, ReportLab, python-docx, data analysis, data structures, Django basics",
+                "Tools and areas: Git, GitHub, GitHub Actions, VS Code, CLI tools, AI-assisted development with manual verification, REST API basics, PostgreSQL basics, ERP workflows, dashboards, testing, documentation, cloud fundamentals, Docker basics, GSAP basics, Framer Motion basics",
+            ],
+        ),
+        (
+            "Course Credentials",
+            [
+                "AI and ML: Machine Learning Specialization; Neural Networks and Deep Learning; Convolutional Neural Networks; NLP with Attention Models; Generative AI; GANs.",
+                "Cloud and security: Microsoft Azure Fundamentals (AZ-900) Cert Prep; Google Cloud Digital Leader Certification Prep; AWS Cloud Practitioner Essentials; IBM Cybersecurity Essentials.",
+                "Software and data: Front-End Development; Python; Data Structures in C; Programming with C; Data Analysis with Python; cloud computing. Full 23-course archive: portfolio link.",
             ],
         ),
         (
@@ -110,13 +118,6 @@ ATS = {
                 "Relevant coursework: Artificial Intelligence, Programming, Data Structures, Web Development, Database Systems",
             ],
         ),
-        (
-            "Additional",
-            [
-                "Availability: Immediate; remote internships, freelance work, part-time developer roles, contract projects around college schedule",
-                "Languages: English, Tamil",
-            ],
-        ),
     ],
 }
 
@@ -135,12 +136,7 @@ STARTUP = {
         (
             "What I Can Help With",
             [
-                "Python scripts that automate repetitive workflows",
-                "PDF/DOCX report generation",
-                "React dashboards and internal-tool screens",
-                "Data cleanup and structured summaries",
-                "Internal tools for small teams",
-                "AI-assisted prototyping, prompt workflows, documentation, and testing",
+                "Python automation, PDF/DOCX report generation, React dashboards and internal tools, data cleanup and structured summaries, and AI-assisted prototyping with documentation and testing.",
             ],
         ),
         (
@@ -148,10 +144,7 @@ STARTUP = {
             [
                 "Rental Research Report Generator | Python, ReportLab, python-docx, JSON",
                 "Built a Python tool that normalizes rental listing data, filters noisy results, ranks suitable houses, and generates decision reports in English and Tamil.",
-                "Replaced scattered rental searching with a structured shortlist.",
-                "Turned public listing data into a ranked report with budget and commute logic.",
-                "Produced family-ready outputs: PDF, DOCX, Markdown, and WhatsApp summary.",
-                "Included real-world safeguards: water, internet, safety, deposit, and agreement verification checklist.",
+                "Replaced scattered rental searching with a structured shortlist, budget and commute logic, PDF/DOCX/Markdown outputs, and real-world verification safeguards.",
                 "Added offline sample data and unit tests so the project can be shown reliably without live portals.",
                 "Printing Press ERP / Business Management System | React, Supabase, business workflows",
                 "Built and deployed practical React/Supabase business software for workflow tracking and operational dashboards.",
@@ -160,17 +153,13 @@ STARTUP = {
         (
             "Skills",
             [
-                "Python, JavaScript, React, Vite, Supabase, Django basics, HTML, CSS, TypeScript basics, REST APIs, PostgreSQL, Git, GitHub, GitHub Actions, Docker basics, Codex, ChatGPT, AI-assisted development, prompt engineering, ERP development, dashboard development, business software, automation, PDF/DOCX generation, responsive web design, UI/UX design, basic testing, CI/CD basics, CLI tools, technical documentation, GSAP basics, Framer Motion basics"
+                "Python, JavaScript, React, Vite, Supabase, Django basics, HTML, CSS, C, data analysis, data structures, TypeScript basics, REST APIs, PostgreSQL, Git, GitHub, GitHub Actions, cloud fundamentals, Docker basics, Codex, ChatGPT, AI-assisted development, prompt engineering, ERP development, dashboard development, business software, automation, PDF/DOCX generation, responsive web design, UI/UX design, basic testing, CI/CD basics, CLI tools, technical documentation, GSAP basics, Framer Motion basics"
             ],
         ),
         (
-            "Work Style",
+            "Learning Evidence",
             [
-                "I communicate progress clearly.",
-                "I document setup and usage.",
-                "I prefer small working versions over vague big promises.",
-                "I verify AI-assisted work before treating it as finished.",
-                "I can learn fast when the problem is real.",
+                "Completed 23 course credentials across machine learning, generative AI, cloud fundamentals, cybersecurity, programming, data analysis, and front-end development. Certificate archive available from the portfolio."
             ],
         ),
         (
