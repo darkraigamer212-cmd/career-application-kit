@@ -709,6 +709,62 @@ ul {
   text-decoration: none;
 }
 
+.open-source-evidence {
+  display: grid;
+  gap: 1.4rem;
+}
+
+.evidence-list {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.evidence-row {
+  padding: 1.25rem 1.35rem;
+}
+
+.evidence-row-heading {
+  align-items: flex-start;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.evidence-row-heading span {
+  color: var(--cyan);
+  display: block;
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.35rem;
+  text-transform: uppercase;
+}
+
+.evidence-row h3 {
+  margin: 0;
+}
+
+.evidence-row p {
+  color: var(--muted);
+  margin: 0.75rem 0 0;
+}
+
+.evidence-row strong {
+  color: var(--text);
+}
+
+.evidence-row a {
+  color: var(--cyan);
+  flex: 0 0 auto;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  text-decoration: none;
+}
+
+.public-github-link {
+  justify-self: start;
+}
+
 .certificate-archive span:first-child { color: var(--cyan); font-size: 0.82rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; }
 .certificate-archive strong { font-size: 1rem; }
 .certificate-archive span:last-child { color: var(--cyan); font-size: 1.5rem; }

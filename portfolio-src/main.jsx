@@ -10,6 +10,7 @@ const links = {
   atsResume: "../docs/generated/karthik_ats_resume.pdf",
   startupResume: "../docs/generated/karthik_startup_resume.pdf",
   github: "https://github.com/darkraigamer212-cmd/career-application-kit",
+  githubProfile: "https://github.com/darkraigamer212-cmd",
   linkedin: "https://www.linkedin.com/in/deepan-karthick-166735374/",
   email: "mailto:deepankarthick212@gmail.com",
   calculator: "https://calculator00.pages.dev/",
@@ -180,6 +181,37 @@ const appliedLearning = [
   { area: "AI-assisted, verifiable delivery", body: "Generative AI and machine-learning coursework strengthens how I evaluate, document, and verify practical AI-assisted workflows.", project: "Career Application Kit", href: links.github }
 ];
 
+const openSourceEvidence = [
+  {
+    name: "Personal Command Center",
+    repository: "personal-command-center",
+    summary: "A personal dashboard and tracker application with a frontend and lightweight backend support.",
+    foundations: "JavaScript application structure, dashboards, data organization, and practical workflow design.",
+    href: "https://github.com/darkraigamer212-cmd/personal-command-center"
+  },
+  {
+    name: "Obsidian Second Brain Builder",
+    repository: "obsidian-second-brain-builder",
+    summary: "A safe, publishable builder that creates an Obsidian second-brain structure from exported conversation data without publishing private notes or source exports.",
+    foundations: "Automation, data handling, documentation, and responsible treatment of private information.",
+    href: "https://github.com/darkraigamer212-cmd/obsidian-second-brain-builder"
+  },
+  {
+    name: "Hela Agent Lab",
+    repository: "hela-agent-lab",
+    summary: "A local learning playground for agent architecture: model runtime, planning loop, memory, guardrails, and a review-first self-editing proposal flow.",
+    foundations: "Generative AI, LLM architecture, machine-learning foundations, testing, and safe AI-assisted development.",
+    href: "https://github.com/darkraigamer212-cmd/hela-agent-lab"
+  },
+  {
+    name: "Procon Landing Deploy",
+    repository: "procon-landing-deploy",
+    summary: "A static landing-page source project prepared as a clean, deployable portfolio artifact.",
+    foundations: "Front-end development, source hygiene, deployment readiness, and clear project presentation.",
+    href: "https://github.com/darkraigamer212-cmd/procon-landing-deploy"
+  }
+];
+
 const timeline = [
   {
     label: "2026 - Present",
@@ -247,6 +279,7 @@ function PortfolioPage() {
       <AicRaiseReady />
       <About />
       <Projects />
+      <OpenSourceEvidence />
       <ProofGallery />
       <SkillMatrix />
       <Credentials />
@@ -412,6 +445,34 @@ function ProjectCard({ project, index }) {
         )) : <span className="private-link">No public link yet</span>}
       </div>
     </motion.article>
+  );
+}
+
+function OpenSourceEvidence() {
+  return (
+    <section className="section-shell open-source-evidence">
+      <motion.div className="section-heading" {...fadeUp}>
+        <p className="section-label">Public GitHub evidence</p>
+        <h2>More projects, documented where reviewers can inspect the work.</h2>
+        <p>These repositories extend the main project portfolio with focused experiments in dashboards, private-data-safe automation, AI agents, and deployable front-end work.</p>
+      </motion.div>
+      <div className="evidence-list">
+        {openSourceEvidence.map((project) => (
+          <motion.article className="evidence-row neon-card" key={project.repository} {...fadeUp}>
+            <div className="evidence-row-heading">
+              <div>
+                <span>{project.repository}</span>
+                <h3>{project.name}</h3>
+              </div>
+              <MotionLink href={project.href}>Review source</MotionLink>
+            </div>
+            <p>{project.summary}</p>
+            <p><strong>Relevant foundations:</strong> {project.foundations}</p>
+          </motion.article>
+        ))}
+      </div>
+      <MotionLink className="button ghost public-github-link" href={links.githubProfile}>View all public GitHub repositories</MotionLink>
+    </section>
   );
 }
 
